@@ -1,0 +1,21 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+\chapter{Conclusions}
+\label{ch:Conclusions}
+
+In the course of this work, we have designed three different memetic algorithms. Their performance has been evaluated by comparing them to each other, as well as to the state-of-the-art algorithms \glsname{BBtw}~\parencite{bachoore-bodlaender-2006-branchAndBound}, \glsname{QuickBB}~\parencite{gogate-2004-quickbb}, \glsname{TabuTW}~\parencite{clautiaux-2004-tabu}, \glsname{ACSILS}~\parencite{hammerl-thesis,hammerl-paper}, \glsname{GA-tw}~\parencite{schafhauser-thesis,schafhauser-paper}, and \glsname{IHA}~\parencite{musliu-2008-ILS}.
+
+Our algorithms have been optimized by parameter tuning software. To ensure that the results represent real-world performance, we have used separate sets of instances for training/tuning (79 instances) and for validation (27 instances). In order for the results to be meaningful, statistical significance tests have been employed for ranking the algorithms.
+
+The proposed memetic algorithms differ with respect to solution quality, i.e., the width of the resulting tree decomposition, where \gls{MA3} takes the lead in almost all instances. They also differ substantially regarding their time response, with \gls{MA3} being quicker than \gls{MA2}, which is in turn quicker than \gls{MA1}. So overall, \gls{MA3} turned out to be superior to the more complex variants \gls{MA1} and \gls{MA2}.
+
+In general, our memetic algorithms are competitive, but they do not dominate all state-of-the-art solvers for this problem. Nevertheless, \gls{MA3} has been able to find new best known upper bounds on 8 benchmark instances of the Second \gls{DIMACS} Implementation Challenge. One of them is also found by \gls{MA2}.
+
+The results suggest that memetic algorithms are promising and worth investigating. Future work includes experiments using parallel implementations of \glspl{MA}, where a natural distinction between the phases of a memetic algorithm can help to optimize for concurrency. Since the way of combining two heuristics into a \gls{MA} has such a large impact on the performance, it might be worth investigating more variants, while aiming at an understanding of the underlying principles.
+
+%Moscato~\parencite{moscato-1989} has also proposed several augmentations to his \gls{MA} design. The most highlighted addition is the replacement of the deterministic acceptance of competitions and cooperations with a stochastic strategy, using a dependency on a value that lessens over time. He denotes the corresponding variable \emph{temperature}, in reference to \emph{simulated annealing}. Other suggested methods include adaptive strategies, reheating, or restarting parts of the population, possibly guided by a population diversity metric. These augmentations could also help to further improve the performance of memetic algorithms.
+
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

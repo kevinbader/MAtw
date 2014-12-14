@@ -1,0 +1,230 @@
+\documentclass[thesis.tex]{subfiles}
+\newcommand{\CurrentInstanceOrig}{}
+\newcommand{\CurrentInstance}{}
+\newcommand{\CurrentInstanceFileEscaped}{}
+\newcommand{\CurrentInstanceTexEscaped}{}
+\begin{document}
+\selectlanguage{USenglish}
+
+\chapter{Performance on Validation Instances, continued}
+%
+   \label{appendix:boring-validation-instances}
+%
+
+This Chapter lists those instances that have not been mentioned in Section~\vref{sec:validation-performance}, on which the tested algorithms perform very similarly.
+
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{barley}}
+   \renewcommand{\CurrentInstanceFileEscaped}{barley}
+   \renewcommand{\CurrentInstanceTexEscaped}{barley}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+%\input{input-validation-validationset-timings.tex}
+%All algorithms find the same results, with no variance, as shown by Figure~\vref{fig:barley-results}. Noticeably, \gls{MA1} needs 574 seconds to get to its best result, while the other algorithms are by far quicker.
+%This can also be observed in the runtime plots which are shown in Figure~\vref{fig:barley-ts}.
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{pathfinder}}
+   \renewcommand{\CurrentInstanceFileEscaped}{pathfinder}
+   \renewcommand{\CurrentInstanceTexEscaped}{pathfinder}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{oesoca+}}
+   \renewcommand{\CurrentInstanceFileEscaped}{oesoca+}
+   \renewcommand{\CurrentInstanceTexEscaped}{oesoca+}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{pigs}}
+   \renewcommand{\CurrentInstanceFileEscaped}{pigs}
+   \renewcommand{\CurrentInstanceTexEscaped}{pigs}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  0.1  &  equal   &  equal   \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.05 &  equal   &  equal   \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.15 &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA1} &  0.05 &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA2} &  0.1  &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA3} &  0.0  &  equal   &  equal   \\
+         \gls{MA1} &vs& \gls{MA2}   &  0.05 &  equal   &  equal   \\
+         \gls{MA1} &vs& \gls{MA3}   &  0.05 &  equal   &  equal   \\
+         \gls{MA2} &vs& \gls{MA3}   &  0.1  &  equal   &  equal   \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{water}}
+   \renewcommand{\CurrentInstanceFileEscaped}{water}
+   \renewcommand{\CurrentInstanceTexEscaped}{water}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{munin1}}
+   \renewcommand{\CurrentInstanceFileEscaped}{munin1}
+   \renewcommand{\CurrentInstanceTexEscaped}{munin1}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1ubq}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1ubq}
+   \renewcommand{\CurrentInstanceTexEscaped}{1ubq}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{knights8\textunderscore{}8}}
+   \renewcommand{\CurrentInstanceFileEscaped}{knights8-8}
+   \renewcommand{\CurrentInstanceTexEscaped}{knights8\textunderscore{}8}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  0.45 & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.3  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.15 &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA1} &  2.2  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA2} &  2.35 & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA3} &  2.5  & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA2}   &  0.15 &  equal   &  equal   \\
+         \gls{MA1} &vs& \gls{MA3}   &  0.3  &  equal   &  equal   \\
+         \gls{MA2} &vs& \gls{MA3}   &  0.15 &  equal   &  equal   \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1a62}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1a62}
+   \renewcommand{\CurrentInstanceTexEscaped}{1a62}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  1.6  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.15 &  equal   &  equal   \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.75 & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA1} &  1.6  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA2} &  0.15 &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA3} &  0.75 & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA2}   &  1.45 & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA3}   &  0.85 & distinct & distinct \\
+         \gls{MA2} &vs& \gls{MA3}   &  0.6  & distinct & distinct \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1sem}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1sem}
+   \renewcommand{\CurrentInstanceTexEscaped}{1sem}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1pwt}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1pwt}
+   \renewcommand{\CurrentInstanceTexEscaped}{1pwt}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1or7}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1or7}
+   \renewcommand{\CurrentInstanceTexEscaped}{1or7}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  2.55 & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.6  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.1  &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA1} &  1.55 & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA2} &  0.4  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA3} &  0.9  & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA2}   &  1.95 & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA3}   &  2.45 & distinct & distinct \\
+         \gls{MA2} &vs& \gls{MA3}   &  0.5  & distinct & distinct \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1on2}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1on2}
+   \renewcommand{\CurrentInstanceTexEscaped}{1on2}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  1.7  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.4  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.8  &  equal   &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA1} &  2.5  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA2} &  1.2  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA3} &  0.0  & (equal)  & (equal)  \\
+         \gls{MA1} &vs& \gls{MA2}   &  1.3  & distinct & distinct \\
+         \gls{MA1} &vs& \gls{MA3}   &  2.5  & distinct & distinct \\
+         \gls{MA2} &vs& \gls{MA3}   &  1.2  & distinct & distinct \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{1oai}}
+   \renewcommand{\CurrentInstanceFileEscaped}{1oai}
+   \renewcommand{\CurrentInstanceTexEscaped}{1oai}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+% ---------------------------------------------------------------------------- %
+   \renewcommand{\CurrentInstance}{\Instance{BN\textunderscore{}0}}
+   \renewcommand{\CurrentInstanceFileEscaped}{BN-0}
+   \renewcommand{\CurrentInstanceTexEscaped}{BN\textunderscore{}0}
+\input{generated-tables/validation-validationset-\CurrentInstanceFileEscaped-results.tex}
+\input{input-validation-validationset-timings.tex}
+\begin{table}[htbp]
+   \caption{Pairwise comparison of means for instance \CurrentInstance}
+   \label{fig:\CurrentInstanceFileEscaped-mannwhitneyu}
+   \centering\small
+      \begin{tabular}{r@{\ }c@{\ }l S[table-format=2.2] c c} \toprule
+         &&&                          & \multicolumn{2}{c}{\header{Mann-Whitney U test}} \\ \cmidrule(lr){5-6}
+         &&& \header{mean diff.} & \header{$\alpha=\SI{10}{\percent}$} & \header{$\alpha=\SI{5}{\percent}$} \\ \midrule
+
+         \gls{IHA} &vs& \gls{MA1}   &  1.7  & distinct &  equal   \\
+         \gls{IHA} &vs& \gls{MA2}   &  0.4  & distinct & distinct \\
+         \gls{IHA} &vs& \gls{MA3}   &  0.8  & distinct & distinct \\
+         \gls{GA-tw} &vs& \gls{MA1} &  2.5  & distinct &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA2} &  1.2  & distinct &  equal   \\
+         \gls{GA-tw} &vs& \gls{MA3} &  0.0  & distinct &  equal   \\
+         \gls{MA1} &vs& \gls{MA2}   &  1.3  &  equal   &  equal   \\
+         \gls{MA1} &vs& \gls{MA3}   &  2.5  &  equal   &  equal   \\
+         \gls{MA2} &vs& \gls{MA3}   &  1.2  & (equal)  & (equal)  \\
+         \bottomrule
+      \end{tabular}
+\end{table}
+% ---------------------------------------------------------------------------- %
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

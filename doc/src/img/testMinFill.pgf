@@ -1,0 +1,106 @@
+\usetikzlibrary{arrows.meta,backgrounds,fit}
+\begin{tikzpicture}
+[scale=0.65,
+ show background rectangle, inner frame sep=2.5em,
+ background rectangle/.style={},
+ vertex/.style={circle,draw=blue!50,fill=blue!20,thick},
+ selectedvertex/.style={circle,draw=red!50,fill=red!20,thick},
+ nextvertex/.style={circle,draw=blue!50,fill=violet!30,thick},
+ edge/.style={thick},
+ newedge/.style={dashed,thick},
+ treenode/.style={rectangle,rounded corners=4,inner sep=6,draw=black,fill=gray!10,thick},
+ treeedge/.style={very thick},
+ hint/.style={-{Latex[]},very thin}]
+\node[rectangle,draw=black!30,rounded corners=4,inner sep=6] at (6,4.8) {Elimination Ordering: 3 -- 5 -- 2 -- 6 -- 7 -- 4 -- 1};
+
+\node[        vertex] (1) at (2,2) {1};
+\node[        vertex] (2) at (2,0) {2};
+\node[selectedvertex] (3) at (4,1) {3};
+\node[        vertex] (4) at (6,0) {4};
+\node[        vertex] (5) at (6,2) {5};
+\node[        vertex] (6) at (8,1) {6};
+\node[        vertex] (7) at (0,1) {7};
+\draw[   edge] (1) to [out=270,in= 90] (2);
+\draw[   edge] (1) to [out=  0,in=100] (3);
+\draw[   edge] (1) to [out=180,in= 80] (7);
+\draw[   edge] (2) to [out=180,in=280] (7);
+\draw[   edge] (2) to [out=  0,in=260] (3);
+\draw[   edge] (3) to [out=280,in=180] (4);
+\draw[   edge] (3) to [out= 80,in=180] (5);
+\draw[   edge] (4) to [out= 90,in=270] (5);
+\draw[   edge] (4) to [out=  0,in=260] (6);
+\draw[   edge] (5) to [out=  0,in=100] (6);
+
+\node[        vertex] (a1) at (2,-2) {1};
+\node[        vertex] (a2) at (2,-4) {2};
+\node[        vertex] (a4) at (6,-4) {4};
+\node[selectedvertex] (a5) at (6,-2) {5};
+\node[        vertex] (a6) at (8,-3) {6};
+\node[        vertex] (a7) at (0,-3) {7};
+\draw[   edge] (a1) to [out=270,in= 90] (a2);
+\draw[newedge] (a1) to [out= 10,in=170] (a5);
+\draw[newedge] (a1) to [out=  0,in=180] (a4);
+\draw[   edge] (a1) to [out=180,in= 80] (a7);
+\draw[   edge] (a2) to [out=180,in=280] (a7);
+\draw[newedge] (a2) to [out=350,in=190] (a4);
+\draw[newedge] (a2) to [out=  0,in=180] (a5);
+\draw[   edge] (a4) to [out= 90,in=270] (a5);
+\draw[   edge] (a4) to [out=  0,in=260] (a6);
+\draw[   edge] (a5) to [out=  0,in=100] (a6);
+
+\node[        vertex] (b1) at (2,-6) {1};
+\node[selectedvertex] (b2) at (2,-8) {2};
+\node[        vertex] (b4) at (6,-8) {4};
+\node[        vertex] (b6) at (8,-7) {6};
+\node[        vertex] (b7) at (0,-7) {7};
+\draw[   edge] (b1) to [out=270,in= 90] (b2);
+\draw[   edge] (b1) to [out=  0,in=180] (b4);
+\draw[newedge] (b1) to [out=  0,in=150] (b6);
+\draw[   edge] (b1) to [out=180,in= 80] (b7);
+\draw[   edge] (b2) to [out=180,in=280] (b7);
+\draw[   edge] (b2) to [out=350,in=190] (b4);
+\draw[newedge] (b2) to [out=  0,in=180] (b6);
+\draw[   edge] (b4) to [out=  0,in=260] (b6);
+
+\node[        vertex] (c1) at (2,-10) {1};
+\node[        vertex] (c4) at (6,-12) {4};
+\node[selectedvertex] (c6) at (8,-11) {6};
+\node[        vertex] (c7) at (0,-11) {7};
+\draw[   edge] (c1) to [out=  0,in=150] (c6);
+\draw[   edge] (c1) to [out=  0,in=180] (c4);
+\draw[   edge] (c1) to [out=180,in= 80] (c7);
+\draw[   edge] (c4) to [out=  0,in=260] (c6);
+\draw[newedge] (c4) to [out=200,in=320] (c7);
+\draw[newedge] (c6) to [out=178,in=  2] (c7);
+
+\node[        vertex] (d1) at (2,-14) {1};
+\node[        vertex] (d4) at (6,-16) {4};
+\node[selectedvertex] (d7) at (0,-15) {7};
+\draw[   edge] (d1) to [out=  0,in=180] (d4);
+\draw[   edge] (d1) to [out=180,in= 80] (d7);
+\draw[   edge] (d4) to [out=200,in=320] (d7);
+
+\node[        vertex] (e1) at (2,-18) {1};
+\node[selectedvertex] (e4) at (6,-20) {4};
+\draw[   edge] (e1) to [out=0,in=180] (e4);
+
+\node[treenode] (A) at (12,1) {3, 5, 2, 4, 1};
+\draw[hint] (4,1.5) .. controls (4.3,4) and (10,4) .. (11,1.5);
+\node[treenode] (B) at (12,-3) {5, 2, 6, 4, 1};
+\draw[hint] (6.2,-1.6) .. controls (8,-0.5) and (10.5,-1) .. (11,-2.5);
+\draw[treeedge] (A) to (B);
+\node[treenode] (C) at (12,-7) {2, 6, 7, 4, 1};
+\draw[hint] (2.3,-7.6) .. controls (4,-5.2) and (10.6,-5.2) .. (11,-6.5);
+\draw[treeedge] (B) to (C);
+\node[treenode] (D) at (12,-11) {6, 7, 4, 1};
+\draw[hint] (8.1,-10.6) .. controls (8.6,-9.2) and (10.8,-9.2) .. (11.2,-10.5);
+\draw[treeedge] (C) to (D);
+\node[treenode] (E) at (12,-15) {7, 4, 1};
+\draw[hint] (0.5,-15) .. controls (7,-17) and (10,-11.5) .. (11.4,-14.5);
+\draw[treeedge] (D) to (E);
+\node[treenode] (F) at (12,-19) {4, 1};
+\draw[hint] (6.2,-19.5) .. controls (7.3,-17.3) and (11.3,-17) .. (11.7,-18.5);
+\draw[treeedge] (E) to (F);
+
+
+\end{tikzpicture}

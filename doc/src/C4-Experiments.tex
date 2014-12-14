@@ -1,0 +1,294 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+\chapter{Memetic Algorithms for Treewidth Optimization}
+\label{ch:algorithms}
+% MA1 ... MMA
+% MA2 ... WMA
+% MA3 ... SMMA
+We have developed three memetic algorithms for finding tree decompositions of small treewidth. Section~\vref{sec:MA1} presents MA1, which closely resembles the original design considerations of Moscato~\parencite{moscato-1989}, along with its concept of partners and opponents. Using a randomly initialized ring structure, selection and recombination is applied with respect to the individual's neighborhood. Section~\vref{sec:MA2} introduces MA2, which is more similar to a traditional \gls{GA}, features elitism for selection, and includes a local search heuristic to improve the best individuals of each generation. Finally, Section~\vref{sec:MA3} combines a \gls{GA} design, borrowed from~\parencite{schafhauser-thesis,schafhauser-paper}, with iterated local search.
+
+In order to ease comparison, all three \glspl{GA} share the implementation of their \gls{ILS} subroutine, which is based on~\parencite{musliu-2008-ILS}. For representing solutions they use elimination orderings, i.e., ordered lists of distinct vertex labels. The fitness of a solution is determined by applying vertex eliminiation to the given graph, similar to what is described in Chapter~\ref{ch:Introduction}, while recording the size of the largest clique during the process. The implementation, which strives to be as efficient as possible, is based on the fitness functions used in, e.g.,~\parencite{musliu-2008-ILS,hammerl-thesis,hammerl-paper}.
+
+
+
+\section{MA1}  % MMA, Moscato-style Memetic Algorithm
+%        ^^^
+   \label{sec:MA1}
+%
+   \gls{MA1} is a memetic algorithm that is similar to the algorithm for the Travelling Salesman Problem in~\parencite{moscato-1989}. It shares the concepts of population, individuals, and crossover with \glspl{GA}, but it imposes a ring structure on the population (see below), as opposed to \glspl{GA}, where the population is unstructured. \gls{MA1}'s pseudo code is displayed in Algorithms \ref{MA1-pseudoI} to \ref{MA1-pseudoIII} on pages \pageref{MA1-pseudoI}--\pageref{MA1-pseudoIII}. The \gls{ILS} heuristic is presented in Algorithms \vref{ILS-pseudoI}, \vref{ILS-pseudoII}, and \vref{ILS-pseudoIII}. Modifications to the design found in~\parencite{musliu-2008-ILS} include a different perturbation size that depends on the size of the population.
+
+\subfile{AlgoILS}
+
+\newglossaryentry{meme}{name=Meme,text=meme,description=\nopostdesc}
+As the basis of memetic algorithms, Moscato utilizes Richard Dawkins' definition of a \emph{\gls{meme}} as \enquote{a unit of imitation in cultural transmission}~\parencite{dawkins-1976-theSelfishGene}. The idea of using memes for algorithms is similar to the idea of gene transmission in \glspl{GA}, but memes are meant to be small consistent parts of a solution rather than a solution as a whole; additionally, memes are meant to spread faster, involving multiple individuals, whereas in \glspl{GA} recombination typically causes exactly two offsprings off of exactly two individuals.
+
+%\begin{sidefigure}{caption=foo,label=ringpic}
+\begin{wrapfigure}{O}{12em}
+%\begin{marginfigure}
+       \strictpagecheck
+       %\begin{sidecaption}[\glsentryname{MMA} Ring Topology]{Examplary ring topology for \gls{MMA}, where the circles represent individuals. The colored circles depict the opponents and partners of the marked individual.}[ringpic]
+       %\begin{center}
+       \centering
+          \small
+\tikzset{grid/.style={color=black!5,very thin}}
+\tikzset{circle/.style={}}
+\tikzset{individual/.style={fill=white}}
+\tikzset{selected/.style={individual}}
+\tikzset{partner/.style={individual,fill=yellow}}
+\tikzset{opponent/.style={individual,fill=red!80}}
+\tikzset{label/.style={font=\tiny\sffamily}}
+\tikzset{labelline/.style={->,densely dashed,color=black!50}}
+\begin{tikzpicture}[scale=1.0]
+%\foreach \x in {-7,-6,...,7}
+   %\draw[grid] (\x em, 8 em) -- (\x em, -8 em);
+%\foreach \y in {-7,-6,...,7}
+   %\draw[grid] (8 em, \y em) -- (-8 em, \y em);
+
+\draw[color=white,fill=black!10] (-6em, 0em) circle(0.8em);
+\draw[opacity=0] (6em, 0em) circle(0.8em);  % for symmetry
+\draw[circle] (0,0) circle (6em);
+\draw[selected] (-6em, 0em) circle(0.2em);
+
+\foreach \d in {300,330,30}
+\draw[opponent]
+  let \p1 = (0,0),
+    \n1 = {6*cos(\d)},
+    \n2 = {6*sin(\d)} in
+  (-\n1 em, \n2 em) circle (0.2em);
+
+\foreach \d in {60,90,240,270}
+\draw[individual]
+  let \p1 = (0,0),
+    \n1 = {6*cos(\d)},
+    \n2 = {6*sin(\d)} in
+  (-\n1 em, \n2 em) circle (0.2em);
+
+\foreach \d in {120,150,...,210}
+\draw[partner]
+  let \p1 = (0,0),
+    \n1 = {6*cos(\d)},
+    \n2 = {6*sin(\d)} in
+  (-\n1 em, \n2 em) circle (0.2em);
+
+\node[label] at (-1.5em, -1em) {opponents};
+\draw[labelline] (-1.65em, -0.7em) .. controls (-1.8em, 0.5em) and (-3em, 1.7em) .. (-4.3em, 2.5em);
+\draw[labelline] (-1.8em, -1.4em) .. controls (-2em, -2em) and (-3em, -2.5em) .. (-4.1em, -2.8em);
+\draw[labelline] (-1.5em, -1.4em) .. controls (-1.6em, -2.5em) and (-2em, -3.7em) .. (-2.5em, -4.4em);
+
+\node[label] at (1.5em, 1em) {partners};
+\draw[labelline] (1.8em, 0.7em) .. controls (2.4em, -0.3em) and (3em, -1.2em) .. (4.3em, -2.3em);
+\draw[labelline] (2em, 0.7em) .. controls (2.4em, 0.3em) and (2.8em, 0em) .. (4.8em, 0em);
+\draw[labelline] (2em, 1.4em) .. controls (2.4em, 2.2em) and (3.6em, 2.4em) .. (4.1em, 2.6em);
+\draw[labelline] (1.8em, 1.4em) .. controls (1.95em, 2.2em) and (2.1em, 3em) .. (2.6em, 4.1em);
+\end{tikzpicture}
+%\end{center}
+       %\vskip -.8\baselineskip plus 0pt minus 0pt
+       \caption[\glsentryname{MA1} Ring Topology]{Examplary ring topology for \gls{MA1}, where the circles represent individuals. The colored circles depict the opponents and partners of the marked individual}\label{ringpic}
+%\end{sidecaption}
+\end{wrapfigure}
+%\end{marginfigure}
+%\end{sidefigure}
+
+The concept of memes does not seem to match the problem at hand very well (at least using elimination orderings as representation), since a part of an elimination ordering does not make sense on its own. Nevertheless, it is possible to apply the concept, such that parts of the orderings are coined memes and exchanged between individuals. In fact, since location and size of a part---the meme---are arbitrary, crossover operators can be applied in the usual way: during crossover, randomly selected ordering positions comprise a meme, and those memes are exchanged to yield new individuals.
+
+\newglossaryentry{partner}{name=Partner,text=partner,description={in \gls{MA1}: individual that is available for cooperation}}
+\newglossaryentry{opponent}{name=Opponent,text=opponent,description={in \gls{MA1}: individual that is available for competition}}
+\gls{MA1}'s main idea is the emphasis on communication between individuals, as a reminiscence to how memes spread between people in the real world\footnote{In a multi-threaded architecture, this communication could happen in parallel, like in the real world, which could potentially lead to great speedups in performance. For the sake of comparability to the other algorithms, however, all experiments have been executed using a single-threaded implementation.}. Each individual communicates differently with three distinct groups of individuals: its \glspl{partner}, its \glspl{opponent}, and the rest of the population. While there is no communication with the latter group, partners are used for \emph{cooperation}, and opponents for \emph{competition}.
+
+\newglossaryentry{cooperation}{name=Cooperation,text=cooperation,description={in \gls{MA1}: recombination of two individuals using a crossover operator}}
+\Gls{cooperation} is what recombination is to a \gls{GA}. In fact, the implementation of \gls{MA1} uses the same \gls{POS} operator for cooperation as \gls{MA2} (Section~\ref{sec:MA2}) and \gls{MA3} (Section~\ref{sec:MA3}) do for recombination. When an individual \emph{proposes} to one of its partners, it subsequently replaces its partner with their child\footnote{No pun intended.}, that is, their crossover result.
+% mutation would go here
+%, with some probability (which in turn is subject to a temperature, as described below). If the individual has been replaced, mutation is applied to it---again, with some probability (that depends on a temperature).
+
+\newglossaryentry{competition}{name=Competition,text=competetion,description={in \gls{MA1}: selection mechanism (as in \gls{GA}) that may replace one of two involved individuals}}
+\Gls{competition} is what selection is to a \gls{GA}. When an individual sends a \emph{challenge} to one of its opponents, the fitness of the two is compared. If the opponent's fitness is worse, it is replaced by a copy of the challenging individual; otherwise, the challenge is deemed fruitless and nothing happens.
+% probablity, temperature
+
+The core of the algorithm is comprised of the following four steps, which are executed by each individual in a loop:
+\begin{enumerate}\itemsep0em
+   \item Improve own solution by applying local search
+   \item Compete with a random opponent
+   \item Improve own solution by applying local search
+   \item Cooperate with a random partner
+\end{enumerate}
+Just as with people in the real world, who (should) take their time to think about what they have heard prior to spreading the news, the individuals in \gls{MA1} are allowed to improve themselves in-between interactions.
+
+In order to select the partners and opponents for each individual, an artificial ring-like topology is imposed on the population, as shown in Figure~\vref{ringpic}. Using this ring topology, each individual's opponents are its neighbors, and its partners are a subset of the population that is on the other side of the ring. Both opponents and partners are connected in this topology. Furthermore, opponents are selected symmetrically around the respective individual; accordingly, partners are selected symmetrically around the individual that is found opposite in the ring.
+
+Moscato suggests that in each phase each individual issues exactly one request, and receives exactly one request. In \gls{MA1}, this is implemented by choosing partners and opponents by \emph{sampling without replacement}.
+
+% The\Index{\gls{temperature}} competition and cooperation phases are governed by a temperature, which resembles the temperature in simulated annealing. The higher the temperature is, the more likely a worse solution gets accepted during competetion and cooperation, and the more likely mutation is applied during cooperation. The temperature is given by
+% \[ \mathit{T\kern-3pt{}emp}(t) = 1000 * e^{\frac{-t}{130}}\,, \]
+% where $t$ is the runtime of the algorithm in seconds. The total runtime is assumed to be 1000 seconds and is normalized accordingly if the actual runtime differs. The denominator $130$ is an empirically spotted constant.
+% The aspiration criterion for accepting worse solutions during competition is given by
+% \[ P_{\mathrm{accept}}(\Delta, t) = \frac{1}{1 + e^{\frac{2 \Delta}{\mathit{T\kern-1pt{}emp}(t)}}}\,, \]
+% where $\Delta$ is the difference in solution quality (treewidth). The factor $2$ is an empirical value.
+% The probability for mutation is given simply by
+% \[ P_{\mathrm{mutate}}(t) = \frac{\mathit{T\kern-3pt{}emp}(t)}{1000}\,. \]
+
+%\begin{sidefigure}{caption={\glsentryname{MA1}'s parameters, with the ranges used by \glsentryname{smac}},label=MA1-params,place=tbp}
+   %\begin{tabular}{lr} \toprule
+      %\multicolumn{1}{c}{\header{Parameter}} & \multicolumn{1}{c}{\header{Range}}\\\midrule
+      %Population size (\gls{GA}) & $[10, 2000] \subset \mathbb{N}$\\
+      %Partner population-fraction & $[0, 1] \subset \mathbb{R}$\\
+      %Opponent population-fraction & $[0, 1] \subset \mathbb{R}$\\
+      %Max.\@ nonimproving outer steps (\gls{IHA}) & $[1, 200] \subset \mathbb{N}$\\
+      %Max.\@ nonimproving inner steps (\gls{IHA}) & $[1, 100] \subset \mathbb{N}$\\
+   %\bottomrule
+   %\end{tabular}
+%\end{sidefigure}
+
+\subfile{AlgoMA1}  % defines MA1-pseudoI, MA1-pseudoII, MA1-pseudoIII
+
+\subsection{Positional Crossover Operator}
+%           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   \label{POS-desc}
+%
+\gls{MA1} makes use of a \emph{crossover operator}, which is capable of creating a new solution based on two existing solutions. Crossover operators are problem specific. In~\parencite{schafhauser-thesis,schafhauser-paper}, various operators have been tested, and \gls{POS}~\parencite{Syswerda:91a} has found to be the most effective one. We have chosen to use only this operator, as the main goal for this work is to assess the value of the combination of the involved (meta)heuristics, rather than the impact of different crossover operators.
+
+A \gls{POS} $C$ may be generated from two solutions $A$ and $B$ using a two-step procedure. First, a randomly selected subset of $A$ is copied to $C$, maintaining the positions. Then the remaining positions of $C$ are filled up with the missing vertices, in the order in which they occur in $B$. For instances that contain more than 500 vertices, this second step is done using a hash-map containing the vertex positions, which is populated as a preprocessing step. This has been evaluated empirically.
+
+The pseudo code of \gls{POS} is shown as part of \gls{MA2} in Algorithm~\vref{MA2-pseudoII}.
+
+
+% ------------------------------------------------------------------------------
+
+\clearpage
+\section{MA2}  % WMA, Widl-style Memetic Algorithm
+%        ^^^
+   \label{sec:MA2}
+%
+   Our second memetic algorithm is \gls{MA2}, which is shown by Algorithms~\vref{MA2-pseudoI} and \vref{MA2-pseudoII} in pseudo code notation. \gls{MA2} can be described as a \gls{GA} that uses the plus strategy for selection (i.e., it is impossible for both parents and their offspring to survive at the same time; see line 26), applying either crossover replacement (line 26) or mutation (line 28), but never both, to each individual in every generation. Additionally, iterated local search is applied to the generation's fittest individuals (lines 31--34), using the same implementation as in \gls{MA1}.
+
+\gls{MA2} uses \emph{elitism}, meaning that the best individual in each generation is guaranteed to survive unalteredly, at least until the next selection phase. The other candidates for the following generation are selected using k-tournament (lines 21--22).
+
+\subfile{AlgoMA2}  % defines MA2-pseudoI, MA2-pseudoII
+
+The parameters of \gls{MA2} are listed at the top of Algorithm~\ref{MA2-pseudoI}. If the tournament size $k$ is set to $1$, the k-tournament selection is effectively transformed into random selection. When combining this random selection with a crossover probability of~$1$ and local search for each individual, the algorithm behaves very similar to the memetic algorithm that Galinier and Hao presented for the graph coloring problem~\parencite{galinier98hybrid}. Because of this similarity, their approach is not modeled explicitly; instead, it is assumed that the tuner will simply shift \gls{MA2}'s parameters to these extremes in the case that they are indeed profitable (as we will see in Chapter~\ref{ch:eval1}, this is not the case).
+
+%\begin{sidefigure}{caption={\glsentryname{MA2}'s parameters, with the ranges used by \glsentryname{smac}},label=MA2-params,place=tbp}
+   %\begin{tabular}{lr} \toprule
+      %\multicolumn{1}{c}{\header{Parameter}} & \multicolumn{1}{c}{\header{Range}}\\\midrule
+      %Population size (\gls{GA}) & $[10, 2000] \subset \mathbb{N}$ \\
+      %Tournament size $k$ & $[1, 5] \subset \mathbb{N}$ \\
+      %P$_\mathrm{crossover}$ & $[0, 1] \subset \mathbb{R}$ \\
+      %Localsearch fraction & $[0, 1] \subset \mathbb{R}$ \\
+      %Max.\@ nonimproving outer steps (\gls{IHA}) & $[1, 200] \subset \mathbb{N}$ \\
+      %Max.\@ nonimproving inner steps (\gls{IHA}) & $[1, 100] \subset \mathbb{N}$ \\
+   %\bottomrule
+   %\end{tabular}
+%\end{sidefigure}
+
+\gls{MA2} also uses \gls{POS} as its crossover operator, as described in Section~\vref{POS-desc}.
+
+A similar algorithm has previously been used for the break scheduling problem~\parencite{widl-thesis,widl-paper}.
+
+\subsection{Insertion Mutation Operator}
+%           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   \label{IM-desc}
+   %http://permalink.obvsg.at/AC00526342 
+%
+\gls{MA2} uses a \emph{mutation operator}, which applies a small modification to a given solution. A mutation operator is typically used in \glspl{GA} for escaping local optima; the same holds for \glspl{MA}. Again, we have chosen to use the mutation operator that has proven to be the most effective one in~\parencite{schafhauser-thesis,schafhauser-paper}.
+
+The \gls{IM}~\cite{Michalewicz92} that is used in two of the \glspl{MA} simply moves one vertex from its position in an elimination ordering to another, randomly selected position.
+
+The pseudo code of \gls{IM} is shown in Algorithm~\vref{MA2-pseudoII}.
+
+\subsection{k-Tournament Selection}
+%           ^^^^^^^^^^^^^^^^^^^^^^
+   \label{k-tournament-desc}
+%
+\gls{MA2} uses \emph{k-tournament}, which is a common, well-performing~\parencite{EA-design-choices} selection operator, for selecting the individuals that are carried from one generation to the next. k-tournament randomly chooses $k$ individuals from a generation and returns the individual with the highest fitness.
+
+The pseudo code of k-tournament selection is also shown in Algorithm~\vref{MA2-pseudoII}.
+
+
+
+% ------------------------------------------------------------------------------
+
+\section{MA3}  % SMMA Schafhauser-Musliu-Hybrid Memetic Algorithm
+%        ^^^
+   \label{sec:MA3}
+%
+   The third memetic algorithm is called \gls{MA3}. \gls{MA3} is also a combination between \gls{GA} and \gls{ILS}, and has been implemented based on two successful designs, namely \gls{GA-tw}~\parencite{schafhauser-thesis,schafhauser-paper} for the \gls{GA} part and the \gls{IHA}~\parencite{musliu-2008-ILS} related \gls{ILS} algorithm that is also used by \gls{MA1} and \gls{MA2}.
+
+%\begin{algorithm}[hbp]
+   %\caption{MA3: Additions to GA-tw's pseudo code}
+   %\label{MA3-pseudo}
+   %\vspace{1ex}\noindent%
+   %After line \ref{GA-globalvars}:
+   %\begin{algorithmic}[0]
+      %\Global{$\var{localsearch fraction} \in [0,1]$}
+      %\Statex
+   %\end{algorithmic}
+
+   %\noindent%
+   %After line \ref{SMMA-entry-point}:
+   %\begin{algorithmic}[0]
+      %\Let {\Var{selection}} {\parbox[t]{.84\linewidth}{$(\var{population size} * \var{localsearch fraction})$ individuals $\in\var{generation}$,\\ selected at random}}\vspace{0.35em}
+      %\ForEach {\Var{individual}} {\Var{selection}}
+         %\Let {\Var{individual}} {\Call{IHA}{\Var{individual}}} \Comment{Algorithm~\vref{IHA-pseudoI}}
+      %\EndForEach
+   %\end{algorithmic}
+%\end{algorithm}
+
+The algorithm, which is displayed in Algorithms \vref{MA3-pseudoI} and \vref{MA3-pseudoII}, uses \gls{ILS} to improve a fraction of each generation. The members of this fraction are selected at random in every iteration.
+
+\gls{MA3} uses the \gls{POS} operator as described in Section~\ref{POS-desc}, the \gls{IM} operator as described in Section~\ref{IM-desc}, and the k-tournament selection operator as described in Section~\ref{k-tournament-desc}.
+
+\subfile{AlgoMA3}
+
+
+\section{Implementation}
+%        ^^^^^^^^^^^^^^
+The memetic algorithms have been implemented from scratch, using \Cpp. To ensure code quality and achieve correctness, state-of-the-art code testing practices have been employed, using \href{https://code.google.com/p/googlemock/}{Goole Mock}\footnote{\url{https://code.google.com/p/googlemock/}} and \href{https://code.google.com/p/googletest/}{Google Test}\footnote{\url{https://code.google.com/p/googletest/}} as the supporting toolkits. All other used libraries are taken from the \href{http://www.boost.org/}{Boost \Cpp\ Libraries}\footnote{\url{http://www.boost.org/}} project.
+The source code is made available online, licensed under GPLv3. See Figure~\ref{software-versions} for information needed to reproduce the results found in this work. Further details can be found in the repository's README file.
+
+\begin{table}[tbp]
+%\begin{sidefigure}{caption=Version information for reproducing the results,label=software-versions,place=tbp}
+   \caption{Information for reproducing the results}
+   \label{software-versions}
+   \small
+   \centering
+   \begin{tabular}{ll}\toprule
+      Git repository & \url{https://github.com/kevinbader/MAtw}\\
+      %Git ref for tuning & \verb|1e2abe455a613dca012710b27f6d052e97866b99|\\
+      %Git ref for validation & \verb|712b3623ac01258068edf53569d36443feade792|\\
+      Platform & \verb|x86_64| GNU/Linux (tested on \verb|Intel64|)\\
+      Compiler & g\textsf{\raise.43ex\hbox{\smaller[5]{\textbf{+\kern-.04em+}}}} (GCC) 4.9.1 20140903 (prerelease)\\
+      \Cpp\ standard library & libstdc\textsf{\raise.43ex\hbox{\smaller[5]{\textbf{+\kern-.04em+}}}} that comes bundled with GCC\\
+      Boost & 1.56.0\\
+      CMake & 3.0.2\\
+      \bottomrule
+   \end{tabular}
+%\end{sidefigure}
+\end{table}
+
+
+
+
+
+%\section{Memetic algorithm after Galinier and Hao}  % Galinier-and-Hao-style Memetic Algorithm
+%\label{GHMA}
+%This variant is due to \textcite{galinier98hybrid}. Their algorithm, which they have shown to perform well on some of \gls{DIMACS}' instances, is exactly
+
+
+% TODO
+%\section{Additional Experiments}
+%\label{AdditionalExperiments}
+%\TODO{delete or fill?}
+   %\subsection{Initial Solution with MinFill Heuristic}
+   %\subsection{Using MinFill Heuristic during search to replace weakest individuals}
+   %\subsection{Improvement of parts of the solution with Heuristic instead of ILS}
+	%\subsection{Comma strategy for selection}
+	%\subsection{The effect of using an elitist individual}
+	%\subsection{Different perturbation sizes (relative to the number of vertices), and adaptive vs. fixed-size perturbation}
+	%\subsection{Population Diversity}
+		%Different measures; effects of reheating the population
+
+%\appendix
+%\printglossaries
+%\printbibliography
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

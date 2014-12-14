@@ -1,0 +1,68 @@
+MA1: normal distribution? shapiro-wilk: W=0.6264505386352539 (p=5.604085799859604e-06) no@5% no@2%
+MA1: normal distribution? skew test: (z=-0.902946827762) p=0.366554115885 => no
+MA2: normal distribution? shapiro-wilk: W=0.43299102783203125 (p=8.316843747024905e-08) no@5% no@2%
+MA2: normal distribution? skew test: (z=3.49243369309) p=0.000478640414318 => no
+MA3: normal distribution? shapiro-wilk: W=0.7672558426856995 (p=0.000291960226604715) no@5% no@2%
+MA3: normal distribution? skew test: (z=2.28238530709) p=0.0224666020253 => no
+/usr/lib/python3.4/site-packages/scipy/stats/morestats.py:993: UserWarning: 6
+  warnings.warn(str(ifault))
+IHA: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+IHA: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+GAtw: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+GAtw: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+equal variances? bartlett: T=inf (p=0.0) [vs Chi-Quadrat_{k-1=4, alpha=.5}]
+equal variances? levene (mean): (W=23.7028290078) p=1.30236351128e-13
+equal variances? levene (median): (W=8.07167832168) p=1.20292120229e-05
+equal means? one-way ANOVA: F=47.1269633508, p=9.0787239531e-22 [vs F_{k-1=4,n-k=95}]
+equal means? kruskal wallis: W=70.4302304473, p=1.84144880825e-14
+LSD: 0.2788716002923737
+Multiple Comparison of Means - Tukey HSD,FWER=0.10
+===========================================
+group1 group2 meandiff lower  upper  reject
+-------------------------------------------
+ GAtw   IHA     0.0    -0.354 0.354  False 
+ GAtw   MA1     1.6    1.246  1.954   True 
+ GAtw   MA2     0.15   -0.204 0.504  False 
+ GAtw   MA3     0.75   0.396  1.104   True 
+ IHA    MA1     1.6    1.246  1.954   True 
+ IHA    MA2     0.15   -0.204 0.504  False 
+ IHA    MA3     0.75   0.396  1.104   True 
+ MA1    MA2    -1.45   -1.804 -1.096  True 
+ MA1    MA3    -0.85   -1.204 -0.496  True 
+ MA2    MA3     0.6    0.246  0.954   True 
+-------------------------------------------
+Multiple Comparison of Means - Tukey HSD,FWER=0.05
+=============================================
+group1 group2 meandiff  lower   upper  reject
+---------------------------------------------
+ GAtw   IHA     0.0    -0.3943  0.3943 False 
+ GAtw   MA1     1.6     1.2057  1.9943  True 
+ GAtw   MA2     0.15   -0.2443  0.5443 False 
+ GAtw   MA3     0.75    0.3557  1.1443  True 
+ IHA    MA1     1.6     1.2057  1.9943  True 
+ IHA    MA2     0.15   -0.2443  0.5443 False 
+ IHA    MA3     0.75    0.3557  1.1443  True 
+ MA1    MA2    -1.45   -1.8443 -1.0557  True 
+ MA1    MA3    -0.85   -1.2443 -0.4557  True 
+ MA2    MA3     0.6     0.2057  0.9943  True 
+---------------------------------------------
+pairwise Welch's t-test with Bonferroni correction:
+ IHA vs MA1  t,p=(-14.236104336041759, 1.3752962022841513e-11) => 	NE @a=10%, NE @a=5%
+ IHA vs MA2  t,p=(-1.8311038136792037, 0.082813842584512617) => 	 E @a=10%,  E @a=5%
+ IHA vs MA3  t,p=(-4.2651482227118587, 0.00041831598819669591) => 	NE @a=10%, NE @a=5%
+GAtw vs MA1  t,p=(-14.236104336041759, 1.3752962022841513e-11) => 	NE @a=10%, NE @a=5%
+GAtw vs MA2  t,p=(-1.8311038136792037, 0.082813842584512617) => 	 E @a=10%,  E @a=5%
+GAtw vs MA3  t,p=(-4.2651482227118587, 0.00041831598819669591) => 	NE @a=10%, NE @a=5%
+ MA1 vs MA2  t,p=(10.425961839183437, 3.0699100956569305e-12) => 	NE @a=10%, NE @a=5%
+ MA1 vs MA3  t,p=(4.0729748178781495, 0.00028148533255335155) => 	NE @a=10%, NE @a=5%
+ MA2 vs MA3  t,p=(-3.0929651738151871, 0.0045836758926646789) => 	NE @a=10%, NE @a=5%
+pairwise Mann-Whitney U test with Bonferroni correction:
+ IHA vs MA1  u,p=(0.0, 1.9756888968913873e-09) => 	NE @a=10%, NE @a=5%
+ IHA vs MA2  u,p=(170.0, 0.040179272715531518) => 	 E @a=10%,  E @a=5%
+ IHA vs MA3  u,p=(80.0, 2.7288325704078695e-05) => 	NE @a=10%, NE @a=5%
+GAtw vs MA1  u,p=(0.0, 1.9756888968913873e-09) => 	NE @a=10%, NE @a=5%
+GAtw vs MA2  u,p=(170.0, 0.040179272715531518) => 	 E @a=10%,  E @a=5%
+GAtw vs MA3  u,p=(80.0, 2.7288325704078695e-05) => 	NE @a=10%, NE @a=5%
+ MA1 vs MA2  u,p=(12.0, 2.9961457179401065e-08) => 	NE @a=10%, NE @a=5%
+ MA1 vs MA3  u,p=(74.0, 0.00013331669572841419) => 	NE @a=10%, NE @a=5%
+ MA2 vs MA3  u,p=(107.0, 0.0016157926293790506) => 	NE @a=10%, NE @a=5%

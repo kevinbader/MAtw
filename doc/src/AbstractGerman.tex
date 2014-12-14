@@ -1,0 +1,15 @@
+\documentclass[thesis.tex]{subfiles}
+\selectlanguage{ngerman}
+\begin{document}
+\chapter*{Zusammenfassung}
+
+Baumzerlegungen kleiner Breite stellen ein mächtiges Werkzeug dar, um der Komplexität schwieriger Probleme entgegenzutreten. Instanzen des Bedingungserfüllungsproblems können beispielsweise in polynomieller Zeit gelöst werden, wenn der zugrundeliegende Graph eine geringe Baumweite aufweist. Es gibt bereits mehrere exakte Algorithmen und Heuristiken, die gute obere Schranken für die natürliche Baumweite eines Graphen finden können. Da der Abstand zwischen unterer und oberer Schranke für viele Instanzen aber noch sehr groß ist, sind solche Algorithmen nachwievor Gegenstand aktueller Forschung. Diese Arbeit untersucht die Brauchbarkeit memetischer Algorithmen in Bezug auf dieses Problem.
+
+Diese Arbeit präsentiert drei neue memetische Algorithmen für das Finden von Baumzerlegungen möglichst kleiner Breite. Die erste Variante verwendet eine zufällig gewählte Ringstruktur, um eine Population von Lösungen zu organisieren. Die Auswahl und Kombination der Individuen hängt von ihrer Umgebung in der Ringstruktur ab. Der zweite Algorithmus ist ein Hybrid zwischen einem genetischen Algorithmus, der mit einer Plus Strategie und Elitarismus arbeitet, und einer Heuristik, die auf lokaler Suche basiert, und in jeder Generation für das Verbessern der besten Lösungen verwendet wird. Die letzte Variante verwendet einen bestehenden genetischen Algorithmus, erweitert um lokale Suche, mit der in jeder Generation ein zufällig gewählter Teil der Population verbessert wird.
+
+Alle drei Varianten wurden mit aktueller Parameter Tuning Software auf die Instanzen der Second \gls{DIMACS} Implementation Challenge optimiert. Um den Einfluss der Parameter besser verstehen zu können, wurden die Korrelationen zwischen Parametereinstellungen und der Qualität der Ergebnisse untersucht und visualisiert.
+
+Um die Leistung der Algorithmen abseits der Benchmark Instanzen bewerten zu können, wurden sie in einem umfassenden Experiment mit einem separaten Satz Instanzen getestet und verglichen. Die Ergebnisse wurden mit statistischen Tests auf ihre Signifikanz hin überprüft. Auch wenn unsere memetischen Algorithmen die aktuell besten Heuristiken nicht dominieren, erweisen sie sich für die meisten Instanzen durchaus als kompetitiv. Weiters konnten die bis dato besten oberen Schranken für 8 \gls{DIMACS} Instanzen von den memetischen Algorithmen verbessert werden.
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

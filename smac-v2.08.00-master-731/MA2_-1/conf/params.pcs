@@ -1,0 +1,6 @@
+populationsize [10, 2000] [300]i
+tournamentSize [1, 5] [3]i
+crossoverProbability [0.0, 1.0] [0.85]
+localsearchFraction [0.0, 1.0] [0.01]
+ilsMaxOuterNonimprovements [1, 200] [10]i
+ilsMaxInnerNonimprovements [1, 100] [10]i

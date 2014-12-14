@@ -1,0 +1,58 @@
+/usr/lib/python3.4/site-packages/scipy/stats/morestats.py:993: UserWarning: 6
+  warnings.warn(str(ifault))
+MA1: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+MA1: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+MA2: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+MA2: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+MA3: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+MA3: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+IHA: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+IHA: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+GAtw: normal distribution? shapiro-wilk: W=1.0 (p=1.0) yes@5% yes@2%
+GAtw: normal distribution? skew test: (z=1.04034946894) p=0.298177568989 => no
+equal variances? bartlett: T=nan (p=nan) [vs Chi-Quadrat_{k-1=4, alpha=.5}]
+equal variances? levene (mean): (W=nan) p=nan
+equal variances? levene (median): (W=nan) p=nan
+equal means? one-way ANOVA: F=nan, p=nan [vs F_{k-1=4,n-k=95}]
+LSD: 0.0
+Multiple Comparison of Means - Tukey HSD,FWER=0.10
+=========================================
+group1 group2 meandiff lower upper reject
+-----------------------------------------
+ GAtw   IHA     0.0     0.0   0.0  False 
+ GAtw   MA1     0.0     0.0   0.0  False 
+ GAtw   MA2     0.0     0.0   0.0  False 
+ GAtw   MA3     0.0     0.0   0.0  False 
+ IHA    MA1     0.0     0.0   0.0  False 
+ IHA    MA2     0.0     0.0   0.0  False 
+ IHA    MA3     0.0     0.0   0.0  False 
+ MA1    MA2     0.0     0.0   0.0  False 
+ MA1    MA3     0.0     0.0   0.0  False 
+ MA2    MA3     0.0     0.0   0.0  False 
+-----------------------------------------
+Multiple Comparison of Means - Tukey HSD,FWER=0.05
+=========================================
+group1 group2 meandiff lower upper reject
+-----------------------------------------
+ GAtw   IHA     0.0     0.0   0.0  False 
+ GAtw   MA1     0.0     0.0   0.0  False 
+ GAtw   MA2     0.0     0.0   0.0  False 
+ GAtw   MA3     0.0     0.0   0.0  False 
+ IHA    MA1     0.0     0.0   0.0  False 
+ IHA    MA2     0.0     0.0   0.0  False 
+ IHA    MA3     0.0     0.0   0.0  False 
+ MA1    MA2     0.0     0.0   0.0  False 
+ MA1    MA3     0.0     0.0   0.0  False 
+ MA2    MA3     0.0     0.0   0.0  False 
+-----------------------------------------
+pairwise Welch's t-test with Bonferroni correction:
+ IHA vs MA1  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+ IHA vs MA2  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+ IHA vs MA3  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+GAtw vs MA1  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+GAtw vs MA2  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+GAtw vs MA3  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+ MA1 vs MA2  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+ MA1 vs MA3  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+ MA2 vs MA3  t,p=(nan, nan) => 	 E @a=10%,  E @a=5%
+pairwise Mann-Whitney U test with Bonferroni correction:

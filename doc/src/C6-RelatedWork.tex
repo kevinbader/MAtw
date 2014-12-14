@@ -1,0 +1,240 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+\chapter{Related Work}
+\label{ch:Related Work}
+
+%An overview of treewidth and related techniques may be found in~\parencite{bodlaender-2005-discovering-treewidth}, which also covers techniques that have been deemed unpractical, like fixed-parameter algorithms. The latter seem to be---albeit fixed-parameter tractable---only interesting from a theoretical point of view. Additionally, the survey mentions (fixed parameter) approximation algorithms.
+
+In this Chapter we present literature related to tree decomposition.
+
+
+\section{Tree Decomposition and Treewidth}
+%        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   \label{sec:treewidth}
+%
+   \gls{tw} has first been introduced by \citeauthor{Robertson1986} in \citeyear{Robertson1986}. % as an invariant of a graph.
+%The formal definitions of tree decomposition and treewidth, which are used throughout this thesis, are taken from~\parencite{bodlaender-1998-perfectEliminationOrdering}:
+\begin{Definition}[Tree Decomposition~\parencite{Robertson1986,koster-bodlaender-hoesel-2001-treewidth}]\label{def:tree decomposition}
+      Let $G=(V,E)$ be a graph. A \emph{tree decomposition} of $G$ is a pair $(T, \mathcal{X})$, where $T = (I, F)$ is a tree with node set $I$ and edge set $F$, and $\mathcal{X} = \{X_i : i \in I\}$ is a family of subsets of $V$, one for each node of $T$, such that
+      \begin{enumerate}[(i)]
+         \item $\bigcup_{i \in I} X_i = V$
+         \item for every edge $vw \in E$, there is an $i \in I$ with $v \in X_i$ and $w \in X_i$, and
+         \item for all $i,j,k \in I$, if $j$ is on the path from $i$ to $k$ in $T$, then $X_i \cap X_k \subseteq X_j$.
+      \end{enumerate}
+      The \emph{width} of a tree decomposition is $\max_{i \in I} \abs{X_i} - 1$. The \emph{treewidth} of a graph $G$, [\ldots], is the minimum width over all possible tree decompositions of $G$.
+   \end{Definition}
+
+   Tree decompositions have successfully been used in solutions to many different problems, including partial \glspl{CSP}~\parencite{NET:NET10046}, the Frequency Assignment Problem~\parencite{kolenkoster99}, Inference Problems in Probabilistic Networks~\parencite{lauritzen1988local}, or the Vertex Cover Problem for planar graphs~\parencite{Alber2005219}. More recently, it has been used for finding differentially regulated subgraphs in biochemical networks~\parencite{hildebrandtalgorithms}, or the analysis of social graphs~\parencite{adcock2014tree}. 
+   A survey on different techniques for computing treewidth, along with proofs of the underlying theorems, may be found in~\parencite{Bodlaender2010259}. Recent work suggests that the treewidth might not be the most important feature of tree decompositions for solving \glspl{CSP}, and related concepts are being introduced, e.g., bag-connected tree decompositions~\parencite{jegou2014tree}.
+
+In the following, different approaches to computing minimal-width tree decompositions of graphs are discussed.
+
+\subsection{Approximation Algorithms}
+%           ^^^^^^^^^^^^^^^^^^^^^^^^
+Polynomial-time approximation algorithms have been found as well. Instead of looking for an optimal solution, they guarantee that their solutions meet a certain level of quality. There are approximation algorithms that achieve a ratio of $\mathcal{O}(\log k)$, when $k$ is the actual treewidth of the input graph; that is, they are able to find tree decompositions of a width smaller than $\mathcal{O}(k\log k)$~\parencite{Amir:2001:EAT:2074022.2074024,Bouchitté2004183}.
+
+There are also several exponential-time approximation algorithms that are able to find tree decompositions of width at most $ck$, where $c$ is some constant; or they tell that the actual treewidth is higher than some given $k$. For example, see~\parencite{Amir:2001:EAT:2074022.2074024,Becker20013,Lagergren199620}.
+
+\subsection{Polynomial-Time Greedy Heuristics}
+%           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%min-degree, min-fill, maximum cardinality search
+Polynomial-time greedy heuristics do not aim at finding the optimal solution, but rather look for reasonable solutions that can be found in a short amount of time. \enquote{Greedy} means that the heuristics build up an elimination ordering one vertex at a time, without ever revoking their decisions. The greedy heuristics for tree decompositions typically differ only in the criterion by which the next vertex is selected.
+
+A simple representative is the Minimum Degree heuristic, which always selects the vertex that currently has the minimum number of unselected neighbors. The Minimum Fill-in heuristic (also known as the min-fill heuristic), on the other hand, selects the vertex that causes the minimal number of additional edges when being removed (recall from Chapter~\ref{ch:Introduction} that erasing a vertex causes additional edges that connects all of its former neighbors with each other). Another one is Maximum Cardinality Search (MCS)~\parencite{tarjan-1984-MCS}. When choosing the next vertex for inclusion into the elimination ordering, MCS counts the number of neighbors (in the original graph) that are already in its current ordering; it then selects the vertex with the most neighbors already included in the ordering (it initializes the ordering with a randomly selected vertex). See~\parencite{koster-bodlaender-hoesel-2001-treewidth} for further information and additional polynomial-time greedy heuristics.
+
+\subsection{Exact Algorithms}
+%           ^^^^^^^^^^^^^^^^
+In~\parencite{exponential1}, an exponential time algorithm that runs in $\mathcal{O^{\ast}}(1.9601^n)$ time is presented (for an explanation of this notation and a general introduction into exponential time algorithms, see~\parencite{woeginger2003exact}). Exponential time algorithms that run in $\mathcal{O^{\ast}}(2^n)$, can be found, for instance, in~\parencite{held1962dynamic}.
+   Branch-and-bound algorithms have independently been developed in~\parencite{gogate-2004-quickbb} and~\parencite{bachoore-bodlaender-2006-branchAndBound}. They tend to be very efficient, especially for smaller instances. The algorithm in~\parencite{gogate-2004-quickbb} is designed to be an anytime algorithm, which means that it will always return a valid solution, even when stopped before finding the optimum.
+   Another branch-and-bound like approach is introduced in~\parencite{schafhauser-thesis}, based on A* search.
+
+\subsection{Metaheuristics}
+%           ^^^^^^^^^^^^^^
+%tabu search, simulated annealing
+Algorithms that perform optimization can either be exact or heuristic. Exact algorithms will find an \emph{optimal} solution in a finite amount of time. Heuristics, on the other hand, lack this guarantee; the solutions they return may in fact be anything between optimal and very poor. The motivation to use heuristics stems from complexity: many interesting problems---theoretical and real-world alike---have been shown to remain forever intractable to exact algorithms, regardless of the ever increasing computational power, simply due to unrealistically large running times.~\parencite{metaheuristics-metapher-exposed}
+
+So a heuristic is an algorithm that produces a result to an optimization problem on a best-effort basis. A metaheuristic is then a template for constructing heuristics:
+\begin{quotation}\enquote{%
+   A metaheuristic is a high-level problem-independent algorithmic framework that provides a set of guidelines or strategies to develop heuristic optimization algorithms. The term is also used to refer to a problem-specific implementation of a heuristic optimization algorithm according to the guidelines expressed in such a framework.}
+   \sourceatright{\parencite{metaheuristics-metapher-exposed,sorensen2013metaheuristics}}
+\end{quotation}
+
+The last sentence suggests why there is some confusion about the term: a metaheuristic is used as a template for designing a heuristic to solve a problem, but this heuristic is then often referred to as metaheuristic as well.
+
+For a general overview of metaheuristics, see \parencite{sorensen2013metaheuristics}. History and trends of metaheurstics are highlighted in~\parencite{metaheuristics-metapher-exposed}.
+Information on metaheurstic methods in the context of tree decompositions may be found in~\parencite{hammerl-musliu-schafhauser-metaheuristicAlgorithms}, which features \glspl{GA}~\parencite{schafhauser-thesis,schafhauser-paper,larranaga-1997-GA}, ant colony optimization~\parencite{hammerl-thesis,hammerl-paper}, and \gls{ILS}~\parencite{musliu-2008-ILS}. Other metaheuristic approaches include simulated annealing~\parencite{kjarulff-1992-SA}, and tabu search~\parencite{clautiaux-2004-tabu}.
+
+\subsubsection{Iterated Local Search}
+%              ^^^^^^^^^^^^^^^^^^^^^
+   \label{ILS}
+%
+\gls{ILS} is a local-search metaheuristic~\parencite{stuetzle-ILS,sorensen2013metaheuristics}. At its core, it tries to find a good solution by applying small changes (\emph{moves}) to a solution so as to gradually improve it. Eventually, this \emph{local search} ends up with a \emph{local optimum}, which means that there is no better solution available that could be obtained using these small changes. In order to avoid getting stuck in such a local optimum, \gls{ILS} from time to time \emph{perturbates} the solution---it applies a large, random change. Due to the perturbation, the local search continues in a different part of the search space, again improving its solution gradually using small changes.
+
+\subsubsection{Genetic Algorithms}
+%              ^^^^^^^^^^^^^^^^^^
+   \label{GA}
+%
+A \gls{GA}~\parencite{sorensen2013metaheuristics} belongs to the family of \emph{evolutionary algorithms}, which mimic evolutionary processes in biology. Evolutionary algorithms in turn are \emph{population-based}, which means that instead of alternating a single solution, they consider multiple solutions (the \emph{population}) in parallel. In a \gls{GA}, new solutions are derived during search by selecting solutions (\emph{individuals}) from the population and recombining them, using \emph{crossover operators}. In addition, possibly \emph{mutation} is applied as well, which is a small random change applied to a solution, using a \emph{mutation operator}.
+
+%different variants of selection (random, k-tournament, plus vs comma), crossover
+
+%\begin{verbatim}
+  %evolutionary algorithm, inspired by natural evolution...
+  %general pseudo code
+  %- selection
+    %- why selection and not just the best individuals? -> local optimum
+    %- k-tournament description + pseudo code; + mention alternatives
+    %- discussion of what happens with different k's
+  %- crossover
+    %- what is crossover
+    %- which operator is used: POS description + pseudo code; + mention alternatives
+    %- what is the crossover rate
+  %- mutation
+    %- what is mutation and why mutation? -> get out of local optimum
+      %- too much mutation -> random walk
+    %- which operator is used: IM description + pseudo code; + mention alternatives
+    %- what is the mutation probability
+  %- deriving a new generation
+    %- plus strategy, description + pseudo code
+    %- comma strategy, description + pseudo code
+%\end{verbatim}
+
+%\gls{POS}
+
+\subsection{Preprocessing}
+%           ^^^^^^^^^^^^^
+In~\parencite{bodlaender-preprocessing}, Bodlaender et al.\@ provide theoretical evidence of the importance of preprocessing rules for achieving best results. Preprocessing, they argue, has proven to be valuable, especially for real-world instances. As the focus of this work is the comparison between algorithms, preprocessing has not been applied. It remains an open question, however, if different algorithm benefit equally from preprocessing.
+
+
+\section{Memetic and Hybrid Algorithms}
+%        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+   \label{related:moscato}
+%
+In~\parencite{moscato-1989}, \citeauthor{moscato-1989} introduces the concept of \emph{\glsdesc{MA}s}, based on the notion of a \emph{meme} as described by \textcite{dawkins-1976-theSelfishGene}. Moscato suggests that, in the realm of memetic algorithms, a meme may be seen as \enquote{a structure with internal consistency}; one or many such memes may comprise a solution. A memetic algorithm after Moscato is an evolutionary algorithm, and therefore uses a population of individuals, rather than a single current solution, to traverse the search space. On top of that, each individual applies a \gls{LS} heuristic on its own solution. Eventually, the resulting local improvements are distributed among the population, according to mechanisms that are similar to \gls{GA}'s crossover, mutation, and selection. The paper suggests to use alternating phases for each individual, as described in Section~\vref{sec:MA1}.
+
+Additional design considerations can be found in a more recent book chapter on memetic algorithms~\cite{moscato-2010-modernMAs}. They suggest tuning the \gls{LS} technique to the characteristics of the search space, and choosing the crossover and mutation operators accordingly. Apparently, inadequate parameter configuration can cause a easily solvable instance to turn non-polynomially solvable. Consequently, (self-)adaptive mechanisms that tune the algorithm to the instance at hand can be beneficial. Finally, the selection of individuals to run \gls{LS} on can be an important choice as well, when not running \gls{LS} on the whole population; for instance, by selecting the best individuals, or by using a stratified approach that selects one individual from each \enquote{quality level}.
+
+Successful implementations of memetic algorithms have been reported for, e.g., the Quadratic Assignment Problem~\parencite{785529}, the Travelling Salesman Problem and the Protein Folding Problem~\parencite{krasnogor2000memetic}, the Generalized Travelling Salesman Problem~\parencite{Bontoux20101844}, the Graph Coloring Problem~\parencite{Lü2010241,galinier98hybrid}, and many others. Another real-world application can be found in~\parencite{widl-thesis,widl-paper} for the break scheduling problem, which is concerned with finding a shift schedule that conforms to various constraints as closely as possible. They define a meme as interfering shifts in such a schedule, using the sum of constraint violations that the meme causes as its fitness.
+
+%\subsection{Hybrid Evolutionary Algorithm for Graph Coloring}
+The \gls{MA} for the Graph Coloring Problem by \textcite{galinier98hybrid} can be described as a \gls{GA} with random selection, full crossover, and complete local search instead of mutation. In other words, for every generation \emph{all} individuals are created using a crossover operator, with the parents selected at random (as opposed to the usual k-tournament selection). After that, \emph{all} individuals undergo local search \emph{instead} of mutation. Their approach has been tested implicitly in this work, by allowing certain parameter ranges for \gls{MA2}. In particular, the relevant parameters are
+   \[
+      \var{tournament size} = 1,\; P_\mathrm{crossover} = 1,\; \text{and}\;\, \var{localsearch fraction} = 1.
+   \]
+   Notably, the original implementation utilized a different crossover operator and local search procedure; substituting those with what is used during the other experiments, however, is done deliberately, as it ensures that the results reflect the quality of the particular approach, rather than the quality of the crossover operators and local search techniques.
+
+\smallbreak
+A definition of, and a survey on, hybrid metaheuristics in general can be found in~\parencite{sorensen2013metaheuristics} and~\parencite{2008-hybridOverview}, respectively. A taxonomy for classifying hybrid algorithms can be found in~\parencite{jourdan-2009-hybridTaxonomy}.
+
+
+%\section{On the Effectiveness of Moves}
+%%        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+%   \newglossaryentry{tabusearch}{name=Tabu~Search,description=\nopostdesc}
+%%
+%In their paper \citetitle{clautiaux-2004-tabu}~\parencite{clautiaux-2004-tabu}, \citeauthor{clautiaux-2004-tabu} present a heuristic, as well as a metaheuristic, for computing upper bounds on the treewidth of a graph. The latter is based on standard tabu search, using vertex elimination orderings as candidate solutions. They provide interesting proofs that show how only a subset of possible vertex translations within the ordering is actually capable of changing the result, leading to a much smaller neighborhood and, consequently, a smaller search space. The idea is that a translation of a vertex from one position to another changes the triangulation graph only between these positions; before and after that interval the triangulation looks the same.
+%
+%They start by showing that swapping two vertices that are adjacent in the ordering, but not in the original graph G, does not change the triangulation: if there is no edge between them in G, eliminating the first vertex (and adding edges in the process) cannot change the successor set of the other vertex. They use this fact to define the neighborhood for their \gls{LS} algorithm as the orderings that stem from swapping each vertex individually with two of its neighbors that come directly before and after the vertex in the ordering, respectively (they call those moves \emph{significant}).
+%
+%If the two adjacent vertices \emph{are} neighbors in G, however, the triangulation does change, but only between the two positions in the ordering. By viewing an arbitrary position translation as a series of elementary exchanges (that is, swaps with the neighbor in G that is nearest in the ordering), they show that the triangulation remains unaffected outside of the interval the translation describes. They use this fact in the computation of the cost function, where intermediate results of previous computations can be reused due to the unaffected parts of the ordering.
+%
+%In addition to using a smaller neighborhood with a size that is bounded by $2n$, they also install a list of nonimproving neighbors for each vertex in the ordering. The list contains the positions of neighbors with which a swap has been tried before but failed to reduce the quality of the ordering. In the next neighborhood this swap needs to be reevaluated only if the swap interval overlaps with the interval of the latest move.
+
+
+%\section{On Tree Decomposition and Treewidth}
+%Treewidth\Index{\gls{tw}} has been introduced in~\parencite{Robertson1986} as a graph invariant. A more recent overview about treewidth and related techniques may be found in~\parencite{bodlaender-2005-discovering-treewidth}\Index{\gls{tdecomp}}, which also covers techniques that have been deemed unpractical, like fixed-parameter algorithms. The latter seem to be---albeit fixed-parameter tractable---only interesting from a theoretical point of view. Additionally, the survey mentions (fixed parameter) approximation algorithms.
+%%\section{Polynomial-Time Algorithms}
+%Polynomial-time greedy heuristics\Index{polynomial-time algorithms} for computing the treewidth of a given graph include maximum cardinality search (MCS)~\parencite{tarjan-1984-MCS}, and the min-fill and min-degree heuristics; see~\parencite{koster-bodlaender-hoesel-2001-treewidth} for a discussion about further polynomial-time algorithms.
+
+%In~\parencite{bodlaender-preprocessing}, Bodlaender et al.\@ provide theoretical evidence of the importance of preprocessing rules for achieving best results. Preprocessing has proven to be valuable, they argue, especially for real-world instances. As the focus of this work is the comparison between algorithms, preprocessing has not been applied. It remains an open question, however, if different algorithm benefit equally from preprocessing.
+
+%\section{Metaheuristics}
+%An\Index{\glspl{Metaheuristic}} overview over metaheurstics in general is given in~\parencite{sorensen2013metaheuristics}; history and trends of metaheurstics are highlighted in~\parencite{metaheuristics-metapher-exposed}.
+%Metaheuristic methods in the context of tree decompositions have been surveyed in~\parencite{hammerl-musliu-schafhauser-metaheuristicAlgorithms}, featuring \glspl{GA}~\parencite{musliu-schafhauser-2007-GA, larranaga-1997-GA}, ant colony optimization~\parencite{hammerl-2009-ACO}, and \gls{ILS}~\parencite{musliu-2008-ILS}. Other metaheuristic approaches include simulated annealing~\parencite{kjarulff-1992-SA}, and tabu search~\parencite{clautiaux-2004-tabu} (see below).
+
+%A definition of, and a survey on, hybrid metaheuristics can be found in~\parencite{sorensen2013metaheuristics} and~\parencite{2008-hybridOverview}, respectively. A taxonomy for classifying hybrid algorithms can be found in~\parencite{jourdan-2009-hybridTaxonomy}.
+
+   %%\subsection{Memetic Algorithms}
+   %\label{related:moscato}
+   %\newglossaryentry{MA}{name=Memetic Algorithm,description=\nopostdesc}
+   %In~\parencite{moscato-1989}\Index{\gls{MA}}, \citeauthor{moscato-1989} introduces the concept of \emph{memetic algorithms}, based on the notion of a \emph{meme} as described by \textcite{dawkins-1976-theSelfishGene}. Moscato suggests that, in the realm of memetic algorithms, a meme may be seen as \enquote{a structure with internal consistency}; one or many such memes may comprise a solution. A memetic algorithm after Moscato is an evolutionary algorithm, and therefore uses a population of individuals, rather than a single current solution, to traverse the search space. On top of that, each individual applies a \gls{LS} heuristic on its own solution. Eventually, the resulting local improvements are distributed among the population, according to mechanisms that are similar to \gls{GA}'s crossover, mutation, and selection. The paper suggests to use alternating phases for each individual, as described in Section~\vref{MMA}.
+      %%\begin{enumerate}[1.]
+         %%\item Start with an initial solution (e.g., a random permutation)
+         %%\item Do local-search
+         %%\item Alternating:
+            %%\begin{enumerate}[a)]
+               %%\item Compete with another individual (cf., \gls{GA}'s selection):
+                  %%\begin{enumerate}
+                     %%\item Compare the own with the other's solution
+                     %%\item If own solution is better, replace other's solution with own
+                     %%\item Go to 2.
+                  %%\end{enumerate}
+               %%\item Cooperate with another individual (cf., \gls{GA}'s crossover and mutation):
+                  %%\begin{enumerate}
+                     %%\item Incorporate the other's solution into the own using a crossover operator
+                     %%\item Replace other's solution with crossover result of self and other
+                     %%\item Apply mutation on other's solution
+                     %%\item Go to 2 (repairs the \enquote{damage})
+                  %%\end{enumerate}
+            %%\end{enumerate}
+      %%\end{enumerate}
+      %%Note that while the algorithm that is layed out in the paper assumes that all individuals are in the same phase at any time, our implementation does not require this. This design decision, which potentially improves runtime performance, is supported by the paper's statement about the lack of reasons for having synchronicity in all localities.
+
+      %Additional design considerations can be found in a more recent book chapter on memetic algorithms~\cite{moscato-2010-modernMAs}.
+      %They suggest tuning the \gls{LS} technique to the characteristics of the search space, and choosing the crossover and mutation operators accordingly. Apparently, inadequate parameter configuration can cause a easily solvable instance to turn non-polynomially solvable. Consequently, (self-)adaptive mechanisms that tune the algorithm to the instance at hand can be beneficial. Finally, the selection of individuals to run \gls{LS} on can be an important choice as well, when not running \gls{LS} on the whole population; for instance, by selecting the best individuals, or by using a stratified approach that selects one individual from each \enquote{quality level}.
+
+      %%\subsubsection{Memetic Algorithm for Break Scheduling}
+      %The ideas layed out above have been applied to real-world problems, such as break scheduling, which is concerned with finding a shift schedule that conforms to various constraints as closely as possible. \textcite{widl-2010-breakscheduling} defines a Meme as interfering shifts in such a schedule, using the sum of constraint violations that the meme causes as its fitness.
+
+   %%\subsection{Hybrid Evolutionary Algorithm for Graph Coloring}
+   %In \citetitle{galinier98hybrid}, \textcite{galinier98hybrid} present a memetic algorithm for the graph coloring problem. Their approach can be described as a \gls{GA} with random selection, full crossover, and complete localsearch instead of mutation. In other words, in every generation \emph{all} individuals are created by a crossover operator, with \emph{randomly selected} parents (as opposed to the usual k-tournament selection, for instance). After that, \emph{all} individuals undergo localsearch \emph{instead} of mutation.
+   %As discussed in Chapter~\ref{ch:experiments}, this approach has not been modeled explicitly in this work, as the algorithm is precisely represented by \gls{MA2} (see Section~\vref{sec:MA2} for details). The relevant parameters are
+   %\[
+      %\var{tournament size} = 1,\; P_\mathrm{crossover} = 1,\; \text{and}\;\, \var{localsearch fraction} = 1.
+   %\]
+   %Notably, the original implementation utilized a different crossover operator and localsearch procedure; substituting those with what is used during the other experiments, however, is done deliberately, as it ensures that the results reflect the quality of the particular approach, rather than the quality of the crossover operators and localsearch techniques.
+
+   %%\subsection{Tabu Search and Effective Moves}
+   %\newglossaryentry{tabusearch}{name=Tabu~Search,description=\nopostdesc}
+   %In their paper\Index{\gls{tabusearch} and effective~moves} \citetitle{clautiaux-2004-tabu}~\parencite{clautiaux-2004-tabu}, \citeauthor{clautiaux-2004-tabu} present a heuristic, as well as a metaheuristic, for computing upper bounds on the treewidth of a graph. The latter is based on standard tabu search, using vertex elimination orderings as candidate solutions. They provide interesting proofs that show how only a subset of possible vertex translations within the ordering is actually capable of changing the result, leading to a much smaller neighborhood and, consequently, a smaller search space. The idea is that a translation of a vertex from one position to another changes the triangulation graph only between these positions; before and after that interval the triangulation looks the same.
+
+   %They start by showing that swapping two vertices that are adjacent in the ordering, but not in the original graph G, does not change the triangulation: if there is no edge between them in G, eliminating the first vertex (and adding edges in the process) cannot change the successor set of the other vertex. They use this fact to define the neighborhood for their \gls{LS} algorithm as the orderings that stem from swapping each vertex individually with two of its neighbors that come directly before and after the vertex in the ordering, respectively (they call those moves \emph{significant}).
+
+   %If the two adjacent vertices \emph{are} neighbors in G, however, the triangulation does change, but only between the two positions in the ordering. By viewing an arbitrary position translation as a series of elementary exchanges (that is, swaps with the neighbor in G that is nearest in the ordering), they show that the triangulation remains unaffected outside of the interval the translation describes. They use this fact in the computation of the cost function, where intermediate results of previous computations can be reused due to the unaffected parts of the ordering.
+
+   %In addition to using a smaller neighborhood with a size that is bounded by $2n$, they also install a list of nonimproving neighbors for each vertex in the ordering. The list contains the positions of neighbors with which a swap has been tried before but failed to reduce the quality of the ordering. In the next neighborhood this swap needs to be reevaluated only if the swap interval overlaps with the interval of the latest move.
+
+   %%\subsection{Large-Neighborhood Search}
+   %\Gls{LNS}\Index{\glsdesc{LNS}} has been introduced in~\parencite{shaw-1998-lns}. The main idea is the concept of \enquote{continual relaxation and re-optimization}: a solution to the problem is first relaxed by removing parts of it, before some exact methods fills in the blanks again. The possible solutions that the relaxation provides for form the neighborhood of the search (depending on the amount of relaxation this neighborhood is quite large, hence the name).
+
+%%\section{Exact Methods}
+%Exact methods\Index{exact methods} are often based on branch-and-bound~\parencite{bachoore-bodlaender-2006-branchAndBound, gogate-2004-quickbb}. A different approach, for example, has been presented by \textcite{shoikhet-1997-treewidthDP}, where optimal triangulations of parts of the input graph are discovered using dynamic programming, and combined using a technique they denote \enquote{simultaneous composition}.
+
+   %%\subsection{Branch and Bound}
+   %\newglossaryentry{BB}{name=Branch-and-Bound,text=branch-and-bound,description=\nopostdesc}
+   %In\Index{\gls{BB}} order to prevent the evaluation of all possible solutions (permutations, in this case), branch-and-bound usually keeps track of lower and upper bounds on the result, which are used during the search to prune (avoid) search branches. The standard implementation of branch-and-bound, applied to treewidth optimization:
+   %\begin{itemize}
+      %\item At each point in the ordering, the current treewidth up until this point is known.
+      %\item When eliminating a vertex, this treewidth gets updated to the degree of that vertex, if larger.
+      %\item Also at each point in the elimination, a lower bound on the treewidth of the remaining graph is computed.
+      %\item During search, the expected minimal treewidth is updated to the maximum of what is known until then (the current treewidth) and what is estimated for the rest of the graph (the lower bound for the remaining graph).
+      %\item The algorithm continues with the next elimination along this branch only if the expected treewidth is smaller than the upper bound.
+      %\item The upper bound is updated at the end of each branch.
+   %\end{itemize}
+
+   %For the calculation of lower bounds, the branch-and-bound algorithm QuickBB~\parencite{gogate-2004-quickbb} uses an algorithm called \emph{minor-min-width}, which also is presented in its paper. QuickBB aims at improving the standard branch-and-bound technique layed out above, by, at each state, improving the expected treewidth, reducing the branching factor, and employing propagation and pruning rules:
+   %\begin{itemize}
+      %\item Using the \emph{simplicial vertex rule} and the \emph{almost simplicial vertex rule} (by Bodlaender et al.), the graph is reduced by eliminating (almost) simplicial vertices with degree less than the current lower bound. This improves the expected treewidth, and reduces the branching factor.
+      %\item The branching is further reduced by considering only the non-neighbors of the eliminated vertex as successor in the ordering.
+      %\item Additional edges are added to the graph whenever two vertices have more common neighbors than the current upper bound on treewidth (plus 1). This potentially amplifies pruning and reduces the branching factor by introducing new (almost) simplicial vertices.
+      %\item Finally, a set of pruning rules specific to the problem prevent the algorithm from following branches that cannot yield better results.
+   %\end{itemize}
+
+
+
+
+%\appendix
+%\printglossaries
+%\printbibliography
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

@@ -1,0 +1,91 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+
+%
+% MA3: Naive combination of Werner Schafhauser's GA and an adaptation of Nysret Musliu's IHA
+%
+\begin{algorithm}[tbhp]
+   \caption{MA3, Part I}
+   \label{MA3-pseudoI}
+   \begin{algorithmic}[1]
+      \Statex
+      \Global{\LetWithoutState {\Var{population size}} {$2000$}}
+      \Global{$\var{localsearch fraction} \in [0,1]$}
+      \Statex
+      \Function{MA3}{}
+         \Let{\Var{generation}}{\Var{population size} random solutions}
+         \Let{\Var{best}}{random individual in \Var{generation}}
+         \LoopFor{$2000$ generations}
+            \Let{\Var{generation}}{\Call{select}{\Var{generation}}}
+            \Let{\Var{generation}}{\Call{recombine}{\Var{generation}}}
+            \Let{\Var{generation}}{\Call{mutate}{\Var{generation}}}
+            \Let {\Var{selection}} {\parbox[t]{.84\linewidth}{$(\var{population size} * \var{localsearch fraction})$ individuals $\in\var{generation}$,\\ selected at random}}\vspace{0.35em}
+            \ForEach {\Var{individual}} {\Var{selection}}
+               \Let {\Var{individual}} {\Call{ILS}{\Var{individual}}} \Comment{Algorithm~\vref{ILS-pseudoI}}
+            \EndForEach
+            \Let{\Var{elitist}}{the \Var{generation}'s best individual}
+            \If{$\fitness{\var{elitist}} < \fitness{\var{best}}$}
+               \Let{\Var{best}}{\Var{elitist}}
+            \EndIf
+         \EndLoopFor
+         \State\Return{\Var{best solution}}
+      \EndFunction
+      \Statex
+      \Function{select}{\Var{generation}}
+         \Let{\Var{selection}}{$\{\}$}
+         \LoopFor{\Var{population size} times}
+            \State \Comment{$k$-tournament with $k=3$}
+            \Let{\Var{contenders}}{$3$ randomly selected, distinct individuals $\in\var{generation}$}%
+            \Let{\Var{winner}}{the contender with the smallest width}
+            \Let{\Var{selection}}{$\var{selection}\cup\{\var{winner}\}$}
+         \EndLoopFor
+         \State\Return{\Var{selection}}
+      \EndFunction
+      \Statex\Comment{continued on page~\pageref{MA3-pseudoII}\ldots}
+   \algstore{MA3}
+   \end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{MA3, Part II}
+   \label{MA3-pseudoII}
+   \begin{algorithmic}[1]\algrestore{MA3}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{MA3-pseudoI}}
+      \Function{recombine}{\Var{generation}}
+         % using neighbors is okay because SELECT randomizes the ordering anyway
+         \State \Comment{the crossover rate is set to \SI{100}{\percent}}
+         \ForEach{\Var{pair} of neighbors}{\Var{generation}}
+            \Let{\Var{first parent}}{first elimination ordering in \Var{pair}}
+            \Let{\Var{second parent}}{second elimination ordering in \Var{pair}}
+            \Let{\Var{first child}}{\Call{crossover}{\Var{first parent}, \Var{second parent}}}
+            \Let{\Var{second child}}{\Call{crossover}{\Var{second parent}, \Var{first parent}}}
+            \State in \Var{generation}, replace \Var{first parent} with \Var{first child}
+            \State in \Var{generation}, replace \Var{second parent} with \Var{second child}
+         \EndForEach
+         \State\Return{\Var{generation}}
+      \EndFunction
+      \Statex
+      \Function{crossover}{\Var{parent1}, \Var{parent2}}
+         \State\Comment{\gls{POS}}
+         \Let{\Var{selected positions}}{randomly select a set of positions of the ordering}
+         \Let{\Var{child}}{\parbox[t]{.84\linewidth}{new elimination ordering where \Var{selected positions} are copied from \Var{parent1}}}\vspace{0.35em}
+         \Let{\Var{child}}{\parbox[t]{.84\linewidth}{\Var{child} with empty positions filled with the remaining vertices, in the order of their occurence in \Var{parent2}}}\vspace{0.35em}
+         \State\Return{\Var{child}}
+      \EndFunction
+      \Statex
+      \Function{mutate}{\Var{generation}}
+         \State \Comment{the mutation rate is set to \SI{30}{\percent}}
+         \Let{\Var{selection}}{\SI{30}{\percent} of \Var{generation}, selected at random}
+         \ForEach{\Var{individual}}{\Var{selection}}
+            \Let{\Var{individual}}{\parbox[t]{.73\linewidth}{randomly choose a position in the \Var{individual}'s elimination ordering and move the corresponding vertex to another, randomly selected position}}\vspace{0.35em}
+            \State in \Var{generation}, replace original individual with mutated \Var{individual}
+         \EndForEach
+         \State\Return{\Var{generation}}
+      \EndFunction
+   \end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

@@ -1,0 +1,103 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+
+%
+% Adaption of Nysret's IHA
+%
+% ILS with hill-climbing as LS, and randomized movements as perturbation mechanism
+%
+\begin{algorithm}[tbhp]
+   \caption{ILS, Part I}
+   \label{ILS-pseudoI}
+   \begin{algorithmic}[1]
+      \Statex
+      \Global{$\var{degradation tolerance} \ge 0$, set to $3$}
+      \Global{$\var{maximal nonimproving outer steps} > 0$}
+      \Global{$\var{maximal nonimproving inner steps} > 0$, set to $10$}
+      \Global{$\var{maximal perturbation repetitions} > 0$, set to $0.05*\var{number of vertices}$}  % set to 11 in the original (TODO mention in text)
+      \Statex
+      \Statex\Comment{continued on page~\pageref{ILS-pseudoII}\ldots}
+   \algstore{ILS}\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{ILS, Part II}
+   \label{ILS-pseudoII}
+   \begin{algorithmic}[1]\algrestore{ILS}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{ILS-pseudoI}}
+      \Function{ILS}{}
+         \Let{\Var{solution}}{random permutation of vertices}
+         \Let{\Var{best}}{\Var{solution}}
+         \Let{\Var{perturbation repetitions}}{$1$}
+         \Let{\Var{last candidate}}{will hold the last iteration's candidate solution}
+         \Let{\Var{nonimproving steps}}{$0$}
+         \While{$\var{nonimproving steps} < \var{maximal nonimproving outer steps}$}
+            \Let{\Var{candidate}}{\Call{min-conflicts tree-search}{\Var{solution}}}
+            \If{$\fitness{\var{candidate}} = \fitness{\var{last candidate}}$}
+               \Let{\Var{same solution counter}}{$\var{same solution counter} + 1$}
+            \EndIf
+            \Let{\Var{last candidate}}{\Var{candidate}}
+            \If{$\fitness{\var{candidate}} < \fitness{\var{best}}$}\Comment{improvement!}
+               \Let{\Var{solution}}{\Var{candidate}}
+               \Let{\Var{best}}{\Var{candidate}}
+               \Let{\Var{nonimproving steps}}{$0$}
+               \Let{\Var{same solution counter}}{$0$}
+               \Let{\Var{perturbation repetitions}}{$1$}
+            \Else
+               \Let{\Var{nonimproving steps}}{$\var{nonimproving steps} + 1$}
+
+               \If{$\fitness{\var{candidate}} = \fitness{\var{best}}$}\Comment{quality unchanged}
+                  \Let{\Var{solution}}{\Var{candidate}}
+                  \Let{\Var{best}}{\Var{candidate}}
+               \ElsIf{$\fitness{\var{candidate}} < \fitness{\var{best}} + \var{deg.\@ tolerance}$}
+                  \Let{\Var{solution}}{\Var{candidate}}\Comment{reuse the slightly worse solution\\\hfill in the next iteration}
+               \Else
+                  \Let{\Var{solution}}{\Var{best}}\Comment{forget about the candidate and\\\hfill go back to a better state}
+               \EndIf
+            \EndIf
+            \If{$\var{nonimproving steps} > 0$ \textbf{and} $\frac{\var{same solution counter}}{\var{nonimproving steps}} > \SI{20}{\percent}$}
+            \Let{\Var{perturbation repetitions}}{max(\parbox[t]{0.45\linewidth}{$\var{perturbation repetitions} + 1$,\\\Var{maximal perturbation repetitions})}}\vspace{0.35em}
+            \EndIf
+            \Let{\Var{solution}}{\Call{random movements}{\Var{solution}, \Var{perturbation repetitions}}}
+         \EndWhile
+         \State\Return{\Var{best}}
+      \EndFunction
+      \Statex\Comment{continued on page~\pageref{ILS-pseudoIII}\ldots}
+   \algstore{ILS}\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{ILS, Part III}
+   \label{ILS-pseudoIII}
+   \begin{algorithmic}[1]\algrestore{ILS}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{ILS-pseudoII}}
+      \Function{min-conflicts tree-search}{\Var{start solution}}
+      \Statex\Comment{called \enquote{LS1} in~\cite{musliu-2008-ILS}}
+         \Let{\Var{best}}{\Var{start solution}}
+         \Let{\Var{nonimproving steps}}{0}
+         \While{$\var{nonimproving steps} < \var{maximal nonimproving inner steps}$}
+            \Let{\Var{candidate}}{\parbox[t]{0.73\linewidth}{in \Var{best}, swap the vertex that causes the largest clique when eliminated during the triangulation (with ties broken randomly) with another, randomly selected vertex}}\vspace{0.35em}
+            \If{$\fitness{\var{candidate}} < \fitness{\var{best}}$}\Comment{improvement!}
+               \Let{\Var{best}}{\Var{candidate}}
+               \Let{\Var{nonimproving steps}}{$0$}
+            \Else
+               \Let{\Var{nonimproving steps}}{$\var{nonimproving steps} + 1$}
+            \EndIf
+         \EndWhile
+         \State\Return{\Var{best}}
+      \EndFunction
+      \Statex
+      \Function{random movements}{\Var{solution}, \Var{repetitions}}
+         \ForAll{$i\in\{1,2,\ldots,\var{repetitions}\}$}
+            \Let{position 1}{random position in \Var{solution}}
+            \Let{position 2}{random position in \Var{solution} that is $\ne \var{position 1}$}
+            \Let{solution}{move vertex in \Var{solution} from \Var{position 1} to \Var{position 2}}
+         \EndFor
+         \State\Return{\Var{solution}}
+      \EndFunction
+   \end{algorithmic}
+\end{algorithm}
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

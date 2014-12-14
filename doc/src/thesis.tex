@@ -1,0 +1,450 @@
+% run with lualatex
+% US English
+\PassOptionsToPackage{final}{graphicx}
+\PassOptionsToPackage{final}{listings}
+\documentclass[11pt,a4paper,final]{memoir}
+\usepackage[pass,showframe=false]{geometry}
+
+\usepackage[log-declarations=false]{xparse}
+\usepackage{luatextra}
+\usepackage{luacolor}
+\usepackage{polyglossia}
+\setdefaultlanguage[variant=usmax]{english}
+%\setotherlanguage[variant=austrian,latesthyphen=true]{german}
+\setotherlanguage[latesthyphen=true]{german}
+\usepackage[autostyle=true]{csquotes}
+
+% ---------------------------------------------------------------------------------------
+%                                    Fonts
+% ---------------------------------------------------------------------------------------
+%\setmainfont{Latin Modern Roman}
+%\setmainfont{EB Garamond}
+%\setmainfont{IM FELL Great Primer}
+%\setmainfont{Gentium Book Basic}  % <-- best candidate in case Latin Modern is too thin when printed
+\setsansfont[Numbers=SlashedZero]{Latin Modern Sans}
+\setmonofont{Inconsolata}
+% tracking=false: http://tex.stackexchange.com/questions/89509/conflict-between-microtype-lualatex-and-otf-fonts-when-typesetting-material-in
+\usepackage[babel,final,tracking=false]{microtype}
+
+% ---------------------------------------------------------------------------------------
+%                     Colors, Tables, Floats and Graphics
+% ---------------------------------------------------------------------------------------
+\usepackage[usenames,dvipsnames,svgnames,table]{xcolor}
+\usepackage[final]{hyperref} 
+\usepackage[final]{bookmark}  % replacement for hyperref's bookmarks
+\graphicspath{{graphics/}}
+\usepackage{pdfpages}
+\usepackage[all]{hypcap} % hyperlink points to start of figure instead of caption
+\usepackage[%
+   framemethod=tikz,
+]{mdframed}
+\usepackage{tikz}
+\usetikzlibrary{intersections,calc,arrows.meta,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.9}
+%\usepgfplotslibrary{fillbetween}  % needs compat=1.10
+
+\usepackage{booktabs}
+\cmidrulekern=.25em
+\usepackage{multirow}
+
+\usepackage{listings}
+\lstset{%
+   basicstyle=\small\fontspec{Source Code Pro},
+   breaklines=true,
+   showspaces=false,
+   showtabs=false,
+}
+
+%\usepackage{dcolumn}
+%\newcolumntype{.}[1]{D{.}{.}{#1}}
+%% here we're setting up a version of the math fonts with normal x-width
+%\DeclareMathVersion{nxbold}
+%\SetSymbolFont{operators}{nxbold}{OT1}{cmr} {b}{n}
+%\SetSymbolFont{letters}  {nxbold}{OML}{cmm} {b}{it}
+%\SetSymbolFont{symbols}  {nxbold}{OMS}{cmsy}{b}{n}
+%\makeatletter
+ %% wide bold decimal column
+ %\newcolumntype{B}[1]{>{\boldmath\DC@{.}{.}{#1}}c<{\DC@end}}
+ %% normal width bold decimal column
+ %\newcolumntype{Z}[1]{>{\mathversion{nxbold}\DC@{.}{.}{#1}}c<{\DC@end}}
+%\makeatother
+
+%% float parameters
+%% see http://tex.stackexchange.com/questions/39017/how-to-influence-the-position-of-float-environments-like-figure-and-table-in-lat
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{4}
+% require fuller float pages
+\renewcommand{\floatpagefraction}{0.8}
+\usepackage{morefloats}
+\usepackage{placeins}
+
+\usepackage[absolute,
+            %showboxes,
+            ]{textpos}  % exact placement of titlepic
+
+% ---------------------------------------------------------------------------------------
+%                                     Misc
+% ---------------------------------------------------------------------------------------
+\usepackage[per-mode=symbol]{siunitx}
+\newcommand{\boldentry}[2]{%
+  \multicolumn{1}{S[table-format=#1,
+                    mode=text,
+                    text-rm=\fontseries{b}\selectfont
+                   ]}{#2}}
+\sisetup{%
+   detect-all % typeset in current font and not in math font
+}
+%\sisetup{detect-weight=true,detect-inline-weight=math}
+
+% ---------------------------------------------------------------------------------------
+%                         References and Bibliography
+% ---------------------------------------------------------------------------------------
+\usepackage{varioref}
+\usepackage[%
+   bibstyle=ieee,
+   citestyle=numeric-comp,
+   %sorting=none, % order of citation
+   sorting=nyt,
+   sortcites=true % sort multiple entries in citation command
+   babel=hyphen,
+   backend=biber,
+   sortlocale=en,
+   texencoding=utf8,
+   bibencoding=utf8,
+   isbn=false,
+   url=false,
+   backref=true,
+]{biblatex}
+\bibliography{biblatex.bib}
+\usepackage[final]{hyperref} 
+
+% ---------------------------------------------------------------------------------------
+%                        Environments and Redefinitions
+% ---------------------------------------------------------------------------------------
+
+% via http://tex.stackexchange.com/questions/43008/absolute-value-symbols
+\usepackage{mathtools}
+\DeclarePairedDelimiter\abs{\lvert}{\rvert}%
+\DeclarePairedDelimiter\norm{\lVert}{\rVert}%
+% Swap the definition of \abs* and \norm*, so that \abs
+% and \norm resizes the size of the brackets, and the 
+% starred version does not.
+\makeatletter
+\let\oldabs\abs
+\def\abs{\@ifstar{\oldabs}{\oldabs*}}
+%
+\let\oldnorm\norm
+\def\norm{\@ifstar{\oldnorm}{\oldnorm*}}
+\makeatother
+
+\usepackage{amssymb}
+\usepackage{amsthm}
+\theoremstyle{definition}
+\newtheorem{Definition}{Definition}[chapter]
+
+\newcommand*{\defeq}{\mathrel{\vcenter{\baselineskip0.5ex \lineskiplimit0pt
+   \hbox{\scriptsize.}\hbox{\scriptsize.}}}%
+=}
+\newcommand{\TODO}[1]{{\color{BurntOrange}TODO\sidepar{\rule[0pt]{10pt}{10pt}} #1}}
+\usepackage{todonotes}
+
+\newcommand{\header}[1]{{\footnotesize\textbf{#1}}}
+\newcommand{\headeR}[4]{\multicolumn{#1}{#2}{\rlap{\rotatebox{#3}{\footnotesize\textbf{#4}}~}}}
+
+% algorithm stuff
+\usepackage[chapter]{algorithm}             % for the algorithm float environment
+\usepackage[  end]{algpseudocode}  % algorithmicx's pseudocode environment
+% small font for all algorithmic environments:
+   \makeatletter
+   \renewcommand{\ALG@beginalgorithmic}{\small}
+   \makeatother
+% \Statex with that takes a number to specify the indentation level:
+   \makeatletter
+   \let\OldStatex\Statex
+   \renewcommand{\Statex}[1][0]{%
+   \setlength\@tempdima{\algorithmicindent}%
+   \OldStatex\hskip\dimexpr#1\@tempdima\relax}
+   \makeatother
+\newcommand{\var}[1]{\textit{#1}\,}
+\newcommand{\Var}[1]{$\var{#1}$}
+\newcommand{\fitness}[1]{\text{fitness}(#1)}
+\newcommand\LetWithoutState[2]{{#1} $\gets$ {#2}}
+\newcommand\Let[2]{\State\LetWithoutState{#1}{#2}}
+\newcommand\Global[1]{\State\textbf{global} {#1}}
+\newcommand\ContinueLine[2]{\Statex[#1]\hphantom{\LetWithoutState{#2}{}}}
+\algrenewcommand\alglinenumber[1]{\textcolor{Gray}{\miniscule#1}}
+%\algrenewcommand\alglinenumber[1]{
+    %{\sf\footnotesize\addfontfeatures{Colour=888888,Numbers=Monospaced}#1}}
+\algblockdefx{LoopFor}{EndLoopFor}%
+   [1]{\textbf{loop for} {#1}:}%
+   [0]{\textbf{end loop}}
+\algblockdefx{ForEach}{EndForEach}%
+   [2]{\textbf{for each} {#1} \textbf{in} {#2} \textbf{do}}%
+   [0]{\textbf{end for each}}
+%\newcommand{\MyReturn}[1]{\State \textbf{return} {#1}}
+
+%% sidecaptions and margin notes
+%% ..and use raggedleft and raggedright the right way
+% %\usepackage{fancyhdr}  % for \iffloatpage
+%    \makeatletter
+%    \def\iffloatpage#1#2{\if@fcolmade #1\else #2\fi}
+%    \makeatother
+% \newcommand{\foobar}[1]{\iffloatpage{on float page}{not on float page}}
+\newcounter{pl}
+\newcommand{\ragmarpar}[1]{%
+   \stepcounter{pl}\label{pl-\thepl}%
+   \ifthenelse{\isodd{\pageref{pl-\thepl}}}%
+   {\marginpar{\raggedright{#1}}}
+   {\marginpar{\raggedleft{#1}}}}% \fontspec{Architects Daughter}
+   %{\marginpar{\raggedright\sffamily{#1}}}
+   %{\marginpar{\raggedleft\sffamily{#1}}}}% \fontspec{Architects Daughter}
+\renewcommand*{\sidecapstyle}{%
+   \captionnamefont{\small}
+   \ifscapmargleft
+      \captionstyle{\raggedleft\small}%
+   \else
+      \captionstyle{\raggedright\small}%
+   \fi}
+%%% add a period to all caption automatically --- is done by the caption package
+%\captiontitlefinal{.}
+%%% modify how captions look like
+% \makeatletter
+% \renewcommand{\fnum@figure}[1]{\textbf{\figurename~\thefigure}\hspace{.25em} }
+% \makeatother
+%% center-align sidecaps in the outer margin
+\sidecapmargin{outer}
+\setsidecappos{c}
+%% align sidebars in the outer margin
+\sidebarmargin{outer}
+%% setup marginfigure
+\setfloatadjustment{marginfigure}{\sidecapstyle\centering}
+%% new figure environment for correct and consistent placement.
+%% \strictpagecheck is required as sometimes captions are put into the wrong margins.
+%% who knows why.
+ \usepackage{xkeyval}
+ \makeatletter
+ \define@cmdkey{sidefigure}{caption}{}      % stored in \cmdKV@sidefigure@caption
+ \define@cmdkey{sidefigure}{toc}[]{}        % stored in \cmdKV@sidefigure@toc
+ \define@cmdkey{sidefigure}{label}{}        % stored in \cmdKV@sidefigure@label
+ \define@cmdkey{sidefigure}{place}[htbp!]{}  % stored in \cmdKV@sidefigure@place
+ \presetkeys{sidefigure}{caption,toc,label,place}{}
+ \newenvironment{sidefigure}[1]
+ {%
+    \setkeys{sidefigure}{#1}
+    \expandafter\figure\expandafter[\cmdKV@sidefigure@place]
+       \strictpagecheck
+       \begin{sidecaption}[\cmdKV@sidefigure@toc]{\cmdKV@sidefigure@caption}[\cmdKV@sidefigure@label]
+          \centering
+          \small
+ }%
+ {%
+       \end{sidecaption}
+    \endfigure
+ }
+ \makeatother
+
+\usepackage{wrapfig}
+
+\usepackage[%
+   margin=1em,
+   justification=RaggedRight,
+   font=small,
+   %labelfont=bf,
+   textfont=it,
+   labelsep=colon,
+   textformat=period,
+   tableposition=above,
+   figureposition=below,
+]{caption}
+
+
+%% footnotes
+   \interfootnotelinepenalty=10000
+   \feetbelowfloat      % memoir p.242
+   \paragraphfootnotes  % memoir p.243
+
+   %\sidefootmargin{outer}
+   %\letcountercounter{sidefootnote}{footnote}
+   %\renewcommand{\footnote}[1]{\sidefootnote{#1}}
+
+   %\footnotesinmargin
+
+   %\newcounter{Marginfootnotecounter}
+   %\renewcommand{\footnote}[1]{%
+      %\refstepcounter{Marginfootnotecounter}%
+      %\textsuperscript{\theMarginfootnotecounter}%
+      %\sidebar{\footnotesize\textsuperscript{\theMarginfootnotecounter}#1}}
+
+\usepackage{relsize}
+\def\ifmonospace{\ifdim\fontdimen3\font=0pt }
+\def\Cpp{%
+\ifmonospace%
+   C++%
+\else%
+   \textsf{C\kern-.05em\raise.43ex\hbox{\smaller[5]{\textbf{+\kern-.04em+}}}}%
+\fi%
+\spacefactor1000 }
+
+\newenvironment{tightcenter}{%
+  \setlength\topsep{1ex}
+  \setlength\parskip{0pt}
+  \begin{center}
+}{%
+  \end{center}
+}
+
+% ---------------------------------------------------------------------------------------
+%                                  Glossaries
+% ---------------------------------------------------------------------------------------
+\usepackage[
+   xindy,
+   toc,
+   %translate=false,
+   %acronym,
+   %nomain,
+   %nowarn,
+]{glossaries}
+\usepackage{glossary-mcols}
+
+% generate style file for 'makeglossaries thesis' script invocation
+\makeglossaries
+
+%% if used, translate=false must be given as a package option to glossaries:
+%\gappto\captionsenglish{%
+%   \renewcommand*{\glossaryname}{Index}%
+%   \renewcommand*{\acronymname}{Glossary}%
+%}
+
+% defines \P, \NP, etc.
+\usepackage[basic]{complexity}
+
+\newacronym[nonumberlist]{P}{P}{polynomial-time complexity class in complexity theory}
+\newacronym[nonumberlist]{NP}{NP}{nondeterministic-polynomial-time complexity class in complexity theory}
+\glsadd{P}\glsadd{NP}
+\newacronym{CSP}{CSP}{constraint satisfaction problem}
+\newacronym{GA}{GA}{genetic algorithm}
+\newacronym{GA-tw}{GA-tw}{Genetic Algorithm for treewidth}
+\newacronym{LS}{LS}{localsearch}
+\newacronym{ILS}{ILS}{iterated local search}
+\newacronym{IHA}{IHA}{Iterative Heuristic Algorithm for treewidth}
+\newacronym{TabuTW}{TabuTW}{tabu search for treewidth}
+\newacronym{ACSILS}{ACS+ILS}{ant colony system in combination with iterated local search for treewidth}
+\newacronym{BBtw}{BB-tw}{branch-and-bound algorithm for treewidth by \citeauthor{bachoore-bodlaender-2006-branchAndBound}}
+\newacronym{QuickBB}{QuickBB}{branch-and-bound algorithm for treewidth by \citeauthor{gogate-2004-quickbb}}
+\newacronym[description=randomly-restarted iterated local search: Concurrent ILS implementation with random restarts after each ILS run]{RRILS}{RRILS}{randomly-restarted iterated localsearch}
+\newacronym{LNS}{LNS}{large-neighborhood search}
+\newacronym{smac}{SMAC}{Sequential Model-based Algorithm Configuration}
+\newacronym{DIMACS}{DIMACS}{Center for Discrete Mathematics \& Theoretical Computer Science. See \url{http://dimacs.rutgers.edu}}
+\newacronym{MA}{MA}{memetic algorithm}
+%\newacronym{SMMA}{SMMA}{Schafhauser-Musliu-Hybrid Memetic Algorithm}
+\newacronym{MA3}{MA3}{\gls{MA} formed by combining \gls{GA-tw} and \gls{IHA}}
+%\newacronym{WMA}{WMA}{Widl-style Memetic Algorithm}
+\newacronym{MA2}{MA2}{\gls{MA} designed along the lines of~\parencite{widl-thesis,widl-paper}}
+%\newacronym{GHMA}{GHMA}{Galinier-and-Hao-style Memetic Algorithm}
+%\newacronym{MMA}{MMA}{Moscato-style Memetic Algorithm}
+\newacronym{MA1}{MA1}{\gls{MA} based on~\parencite{moscato-1989}}
+\newacronym{POS}{POS-crossover}{position-based crossover}
+\newacronym{IM}{IM}{insertion mutation}
+\newacronym{LOWESS}{LOWESS}{locally weighted scatterplot smoothing}
+\newacronym{ANOVA}{ANOVA}{analysis of variance}
+\newglossaryentry{tdecomp}{name=Tree Decomposition,description=\nopostdesc}
+\newglossaryentry{tw}{name=Treewidth,description=\nopostdesc}
+\newglossaryentry{Metaheuristic}{name=Metaheuristic,description=\nopostdesc}
+\glsunset{DIMACS}
+\glsunset{MA1}
+\glsunset{MA2}
+\glsunset{MA3}
+
+\newcommand{\Instance}[1]{\texttt{#1}}
+
+% ---------------------------------------------------------------------------------------
+%                                    Index
+% ---------------------------------------------------------------------------------------
+%\usepackage{makeidx}
+%\makeindex
+%\newcommand{\Index}[2][#2]{\index{#1}\ragmarpar{#2}}
+\newcommand{\Index}[1]{\ragmarpar{#1}}
+
+% ---------------------------------------------------------------------------------------
+%                                Document Setup
+% ---------------------------------------------------------------------------------------
+\hypersetup{%
+   pdfencoding=auto,
+   pdfauthor={Kevin Bader BSc},
+   pdftitle={Memetic Algorithms for Tree Decomposition},
+   pdfsubject={Memetic Algorithms for Tree Decomposition},
+   pdfkeywords={tree decomposition, treewidth, memetic algorithm, hybrid algorithm, metaheurstic},
+   pdfborder={0 0 0},
+}
+
+\makepagestyle{numberCorner}
+\makeevenfoot{numberCorner}{\thepage}{}{}
+\makeoddfoot{numberCorner}{}{}{\thepage}
+
+\setsecnumdepth{subsection}
+\settocdepth{section}
+
+\usepackage{blindtext}
+\usepackage{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+\hyphenation{local-search meta-heuristic Bedingungs-erfüllungs-problems zugrunde-liegende}
+
+% ---------------------------------------------------------------------------------------
+%                                 Front Matter
+\frontmatter
+% ---------------------------------------------------------------------------------------
+% titlepages
+\pagenumbering{roman}
+\subfile{titlepage-de}
+\cleardoublepage
+\subfile{titlepage-en}
+\cleardoublepage
+
+\selectlanguage{ngerman}
+\subfile{ErklaerungDerSelbststaendigkeit}
+\selectlanguage{USenglish}
+
+\selectlanguage{ngerman}
+\subfile{danksagung}
+\subfile{AbstractGerman}
+\cleardoublepage
+\selectlanguage{USenglish}
+\subfile{AbstractEnglish}
+\selectlanguage{USenglish}
+
+\cleardoublepage
+\pagestyle{numberCorner}
+\tableofcontents
+\listoffigures
+\listoftables
+{\let\clearpage\relax\listofalgorithms}
+\addcontentsline{toc}{chapter}{\listalgorithmname}
+
+% ---------------------------------------------------------------------------------------
+%                                 Main Matter
+\mainmatter
+\pagenumbering{arabic}
+\pagestyle{numberCorner}
+% ---------------------------------------------------------------------------------------
+
+\subfile{C1-Introduction}
+\subfile{C6-RelatedWork}
+\subfile{C4-Experiments}
+\subfile{C-Eval1}
+\subfile{C5-ResultsAndDiscussion}
+\subfile{C-Conclusions}
+
+% ---------------------------------------------------------------------------------------
+%                                 Back Matter
+\appendix
+\subfile{A-BoringValidationResults}
+% ---------------------------------------------------------------------------------------
+\glossarystyle{tree}\printglossaries
+\appto{\bibsetup}{\raggedright}
+\printbibliography
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

@@ -1,0 +1,126 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+
+%
+% Moscato-inspired memetic algorithm for the treewidth minimization problem
+%
+
+\begin{algorithm}[tbhp]
+   \caption{MA1, Part I}
+   \label{MA1-pseudoI}
+   \begin{algorithmic}[1]
+      \Statex
+      \Global{$\var{population size} > 0$}
+      \Global{$\var{partner fraction} \in [0,1]$}
+      \Global{$\var{opponent fraction} \in [0,1]$}
+      \Global{$\var{maximal nonimproving outer steps} > 0$}\Comment{for \gls{ILS}}
+      \Global{$\var{maximal nonimproving inner steps} > 0$}\Comment{for \gls{ILS}}
+      \Statex
+      \Function{MA1}{}
+         \Let{\Var{generation}}{\Var{population size} random solutions}
+         \ForEach{\Var{individual}}{\Var{generation}}\Comment{organize population\\\hfill in a ring topology}
+            \Let{opponents(\Var{individual})}{the $\var{population size} * \var{opponent fraction}$ nearest}
+               \ContinueLine{2}{opponents(\Var{individual})}(w.r.t.\@ the ring topology) individuals
+            \Let{partners(\Var{individual})}{the $\var{population size} * \var{partner fraction}$ most distant}
+               \ContinueLine{2}{partners(\Var{individual})}(w.r.t.\@ the ring topology) individuals
+         \EndForEach
+         \Let{\Var{best solution}}{random individual in \Var{generation}}
+         \LoopFor{1000 seconds}
+            \ForEach{\Var{individual}}{\Var{generation}}
+               \Let {\Var{individual}} {\Call{\gls{ILS}}{\Var{individual}}} \Comment{Algorithm~\vref{ILS-pseudoI}}
+            \EndForEach
+            \Let{\Var{best solution}}{\Var{generation}'s best solution if better than \Var{best solution}}
+            \Let{\Var{generation}}{\Call{competitions}{\Var{generation}}}
+            \ForEach{\Var{individual}}{\Var{generation}}
+               \Let {\Var{individual}} {\Call{\gls{ILS}}{\Var{individual}}} \Comment{Algorithm~\vref{ILS-pseudoI}}
+            \EndForEach
+            \Let{\Var{best solution}}{\Var{generation}'s best solution if better than \Var{best solution}}
+            \Let{\Var{generation}}{\Call{cooperations}{\Var{generation}}}
+         \EndLoopFor
+         \State\Return{\Var{best solution}}
+      \EndFunction
+      \Statex\Comment{continued on page~\pageref{MA1-pseudoII}\ldots}
+   \algstore{MA1}\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{MA1, Part II}
+   \label{MA1-pseudoII}
+   \begin{algorithmic}[1]\algrestore{MA1}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{MA1-pseudoI}}
+      \Function {competitions} {\Var{generation}}
+         \ForEach {\Var{individual}} {\Var{generation}}
+            \Let {\Var{opponent}} {\Call{choose opponent}{\Var{individual}}}
+            \State mark \Var{individual} as challenging \Var{opponent}
+         \EndForEach
+         \ForEach {\Var{individual}} {\Var{generation}}
+            %\State resolve issued challenge using a random number and the current temperature
+            \State resolve issued challenge
+            \If {successful}
+               \State store \Var{individual} with the challenged individual,
+               \Statex[6] but do not replace just yet
+            \EndIf
+         \EndForEach
+         \ForEach{\Var{individual}}{\Var{generation}}
+            \If {\Var{individual} has lost a successful challenge in the previous step}
+               \State replace \Var{individual} with the ordering stored with it in the previous step
+            \EndIf
+         \EndForEach
+         \State\Return{\Var{generation}}
+      \EndFunction
+      \Statex
+      \Function {choose opponent} {\Var{individual}}
+         \Loop
+            \Let {\Var{opponent}} {randomly choose from opponents(\Var{individual})}
+            \If {\Var{opponent} has not yet been challenged in this generation,
+                  \Statex[5] \textbf{and} does not challenge \Var{individual} in this generation}
+               \State \Return {\Var{opponent}}
+            \EndIf
+         \EndLoop
+      \EndFunction
+      \Statex\Comment{continued on page~\pageref{MA1-pseudoIII}\ldots}
+   \algstore{MA1}\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{MA1, Part III}
+   \label{MA1-pseudoIII}
+   \begin{algorithmic}[1]\algrestore{MA1}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{MA1-pseudoII}}
+      \Function{cooperations}{\Var{generation}}
+         \ForEach {\Var{individual}} {\Var{generation}}
+            \Let {\Var{partner}} {\Call{choose partner}{\Var{individual}}}
+            \State mark \Var{individual} as proposing to \Var{partner}
+         \EndForEach
+         \ForEach {\Var{individual}} {\Var{generation}}
+            %\State resolve issued proposal using a random number and the current temperature
+            %\If {successful}
+               \State recombine the two individuals using crossover (\gls{POS})
+               %\State apply mutation (\gls{IM})
+               \State store with addressee of the proposal (do not replace just yet)
+            %\EndIf
+         \EndForEach
+         \ForEach{\Var{individual}}{\Var{generation}}
+            \If {\Var{individual} has been proposed to successfully in the previous step}
+               \State replace \Var{individual} with the ordering stored with it in the previous step
+            \EndIf
+         \EndForEach
+         \State\Return{\Var{generation}}
+      \EndFunction
+      \Statex
+      \Function {choose partner} {\Var{individual}}
+         \Loop
+            \Let {\Var{partner}} {randomly choose from partners(\Var{individual})}
+            \If {\Var{partner} has not yet received a proposal in this generation,
+                  \Statex[5] \textbf{and} does not propose to \Var{individual} in this generation}
+               \State \Return {\Var{partner}}
+            \EndIf
+         \EndLoop
+      \EndFunction
+   \end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

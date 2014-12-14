@@ -1,0 +1,19 @@
+\documentclass[thesis.tex]{subfiles}
+\selectlanguage{USenglish}
+\begin{document}
+\chapter*{Abstract}
+
+A tree decomposition of small width represents a valuable tool for tackling hard problems. For example, instances of constraint satisfaction problems can be solved in polynomial time if their underlying graph can be transformed into a tree decomposition of small width. There exist several exact algorithms and heuristics for finding tree decompositions of small widths for a given graph. However, developing new methods for finding good upper bounds for tree decompositions is still an important research issue. This thesis investigates the application of memetic algorithms, which have, to the best of our knowledge, not yet been applied to tree decompositions.
+
+We propose and implement three new memetic algorithms for finding tree decompositions of small width. The first algorithm organizes its population of solutions in a randomly initialized ring structure, which is used to employ selection and recombination among the individual solutions according to their vicinity. Each generation is collectively improved using iterated local search. The second algorithm is a hybrid between a genetic algorithm that uses elitism for selection, and iterated local search, which is used to improve the best individuals of every generation. Finally, the third algorithm implements an existing genetic algorithm design and also incorporates iterated local search, which is applied to a random fraction of each generation.
+
+All three variants have been tuned using state-of-the-art parameter tuning software on instances of the Second \gls{DIMACS} Implementation Challenge. In order to achieve a better understanding of the algorithms, the correlation between parameter settings and solution quality has been examined.
+
+We offer an extensive comparison, which relates the performance of our memetic algorithms to state-of-the-art solvers for tree decomposition. Featuring a set of instances different to those used for parameter tuning, the comparison aims at providing real-world validity. The results have been confirmed using statistical significance tests. We show that our memetic algorithms do not dominate the state-of-the-art algorithms for this problem, but they prove to be competitive on most instances. Furthermore, one of our algorithms has been able to improve 8 best known upper bounds for the benchmark instances of the Second \gls{DIMACS} Implementation Challenge.
+
+%\vfill\noindent{\small%
+%Keywords: tree decomposition, treewidth, memetic algorithm, metaheuristic}
+
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :

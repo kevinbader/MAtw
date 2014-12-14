@@ -1,0 +1,100 @@
+# The first version of the Barley network, a probabilistic network developed by Kristensen and Rasmussen in a project for growing malting barley without use of pesticides.
+# This is the moralized graph of the network.
+# |V| = 48, |E| = 126
+barley
+# Frequency assignment instance from CALMA project
+# |V| = 458, |E| = 1877
+# uses weights
+# graph13
+# Frequency assignment instance from CALMA project
+# |V| = 340, |E| = 975
+# uses weights
+# celar11
+# Graph from the work of Cook and Seymour, where they solve TSP with branch decompositions
+# |V| = 2048, |E| = 3087
+rl5934
+# Graph from the work of Cook and Seymour, where they solve TSP with branch decompositions
+# |V| = 1985, |E| = 3109
+pcb3038
+# Graph from the work of Cook and Seymour, where they solve TSP with branch decompositions
+# |V| = 3326, |E| = 5147
+fnl4461
+# Graph from the work of Cook and Seymour, where they solve TSP with branch decompositions
+# |V| = 2103, |E| = 3973
+fl3795
+# A probabilistic network for assisting surgical pathologists with the diagnosis of lymph-node diseases
+# The graph given here is the undirected graph, obtained from applying moralization to the directed probabilistic network.
+# |V| = 109, |E| = 211
+pathfinder
+# Probabilistic network for staging of oesophageal carcinoma, developed at Utrecht University by L. van der Gaag et al. The graph given here is the version after the moralization step.
+# |V| = 67, |E| = 208
+oesoca+
+# Probabilistic network for linkage analysis
+# |V| = 724, |E| = 1738
+link
+# See http://www.cs.huji.ac.il/labs/compbio/Repository/Datasets/diabetes/diabetes.htm
+# |V| = 413, |E| = 819
+diabetes
+# A probabilistic network.
+# See http://www.cs.huji.ac.il/labs/compbio/Repository/Datasets/pigs/pigs.htm
+# The network is given here in its moralized version.
+# |V| = 441, |E| = 806
+pigs
+# From the original file:
+# Preliminary model of the biological processes of a water purificationplant. The network consists of four structurally identical subnetworks, each representing a time slice of 15 minutes. The network was developedby Finn V. Jensen, Uffe Kjærulff, Kristian G. Olesen, and Jan Pedersen.
+# This is a probabilistic network, given here after the moralization step.
+# |V| = 32, |E| = 123
+water
+# A subset of the Munin network; a probablistic network.
+# The version here is after the moralization step.
+# |V| = 189, |E| = 366
+munin1
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. The graph comes from ubiquitin, a well studied protein (PDB ID 1ubq).  Each vertex represents a single side chain.  Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay
+# |V| = 74, |E| = 211
+1ubq
+# The vertices of this graph correspond to the squares of an 8 by 8 chessboard. There is an edge between vertices if these are a knights-move away from each other. The origin of this graph can be found in the more than 1000 years old knights-tour puzzle: to find a Hamiltonian path or cycle in this graph.
+# |V| = 64, |E| = 168
+knights8_8
+# Graph from Delauney triangulation of TSP instance (Biergarten in Augsburg)
+# |V| = 127, |E| = 368
+# uses weights
+# bier127.tsp
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay 
+# |V| = 122, |E| = 1516
+1a62
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay 
+# |V| = 57, |E| = 570
+1sem
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay
+# |V| = 87, |E| = 788
+1qtn
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay
+# |V| = 61, |E| = 657
+1pwt
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay
+# |V| = 180, |E| = 1875
+1or7
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay1on
+# |V| = 135, |E| = 1527
+1on2
+# A graph from the field of computational biology. A tree-decomposition directs a dynamic programming algorithm for protein redesign. Each vertex represents a single side chain. Each edge represents the existence of a pairwise interaction between the two side chains. Copyright Andrew Leaver-Fay1on
+# |V| = 58, |E| = 524
+1oai
+# Moralized version of a graph used in the UAI 2006 Inference Evaluation. This is a random modification of the Alarm network
+# |V| = 100, |E| = 300
+BN_0
+# Moralized version of a graph used in the UAI 2006 Inference Evaluation. This is a modified form of the Diagnosis graph
+# |V| = 2127, |E| = 5581
+BN_16
+# Moralized version of a graph used in the UAI 2006 Inference Evaluation. This is a DBN from speech recognition that is unrolled a fixed amount
+# |V| = 2843, |E| = 8108
+BN_20
+# Moralized version of a DAG used in the UAI 2006 Inference Evaluation. The original DAG was a grid.
+# |V| = 1156, |E| = 3333
+BN_30
+# Moralized version of a DAG used in the UAI 2006 Inference Evaluation. The original DAG was from iscas85.
+# |V| = 880, |E| = 1577
+BN_42
+# Moralized version of a DAG used in the UAI 2006 Inference Evaluation. The original DAG was from iscas89.
+# |V| = 661, |E| = 2131
+BN_47

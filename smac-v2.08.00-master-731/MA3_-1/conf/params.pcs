@@ -1,0 +1,11 @@
+# population size must be even, so we're doubling the
+# value in wrapper.rb
+half_populationsize [5, 1000] [500]i
+
+maxIlsOuterNonimprovements [1, 200] [10]i
+
+# with MAXVERTICES set to 1000 in src/common.h, setting
+# localsearchFraction to something smaller than 0.001 does
+# not make any sense (unless there should be no localsearch).
+localsearchFraction [0.001, 1.0] [0.01]
+

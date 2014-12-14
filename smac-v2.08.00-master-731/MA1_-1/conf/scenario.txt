@@ -1,0 +1,9 @@
+algo = ruby ../bin/wrapper.rb
+execdir = MA1_-1/workdir
+deterministic = false
+run_obj = quality
+overall_obj = mean
+target_run_cputime_limit = 1000
+wallclock_limit = 1814400
+paramfile = MA1_-1/conf/params.pcs
+instance_file = MA1_-1/conf/instances-training-set.txt

@@ -1,0 +1,5 @@
+populationsize [10, 2000] [300]i
+partnerFraction [0.0, 1.0] [1.0]
+opponentFraction [0.0, 1.0] [0.01]
+ilsMaxOuterNonimprovements [1, 200] [10]i
+ilsMaxInnerNonimprovements [1, 100] [10]i

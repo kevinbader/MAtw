@@ -1,0 +1,102 @@
+\documentclass[thesis.tex]{subfiles}
+\begin{document}
+\selectlanguage{USenglish}
+
+%
+% Magdalena Widl's algorithm, adapted to treewidth minimization
+%
+
+\begin{algorithm}[tbhp]
+   \caption{MA2, Part I}
+   \label{MA2-pseudoI}
+   \begin{algorithmic}[1]
+      \Statex
+      \Global{$\var{population size} > 0$}
+      \Global{tournament size $k > 0$}\Comment{selection pressure}
+      \Global{$P_\mathrm{crossover} \in [0, 1]$}\Comment{probability for an individual to be replaced\\\hfill by crossover with another individual}
+      \Global{$\var{localsearch fraction} \in [0,1]$}
+      \Global{$\var{maximal nonimproving outer steps} > 0$}\Comment{for \gls{ILS}}
+      \Global{$\var{maximal nonimproving inner steps} > 0$}\Comment{for \gls{ILS}}
+      \Statex
+      \Function{MA2}{}
+         \Let{\Var{generation}}{\Var{population size} random solutions}
+         \Let{\Var{best solution}}{random individual in \Var{generation}}
+         \LoopFor{1000 seconds}
+            \Let{\Var{generation}}{\Call{advance population}{\Var{generation}}}
+            \Let{\Var{elitist}}{the \Var{generation}'s best individual}
+            \If{$\fitness{\var{elitist}} \le \fitness{\var{best solution}}$}
+               \Let{\Var{best solution}}{\Var{elitist}}
+            \EndIf
+         \EndLoopFor
+         \State\Return{\Var{best solution}}
+      \EndFunction
+      \Statex
+      \Function{advance population}{\Var{generation}}
+         \Let{\Var{elitist}}{the \Var{generation}'s best individual}
+         \Let{\Var{candidates}}{$\{\var{elitist}\}$ $\cup$}
+            \ContinueLine{1}{\Var{candidates}}\Call{select individuals}{\Var{generation}, $\var{population size} - 1$}
+         \ForEach{\Var{candidate}}{$\var{candidates}\setminus\var{elitist}$}
+            \If{random float $\in [0,1) < P_\mathrm{crossover}$}
+               \Let{\Var{partner}}{some other, randomly selected individual $\in\var{candidates}$}
+               \Let{\Var{candidate}}{\Call{crossover}{\Var{candidate}, \Var{partner}}}
+            \Else
+               \Let{\Var{candidate}}{\Call{mutate}{\Var{candidate}}}
+            \EndIf
+         \EndForEach
+         \Let{\Var{fittest}}{the $(\var{population size} * \var{localsearch fraction})$ fittest}
+            \ContinueLine{1}{\Var{fittest}}individuals $\in\var{candidates}$
+         \ForEach{\Var{individual}}{\Var{fittest}}
+            \Let {\Var{individual}} {\Call{\gls{ILS}}{\Var{individual}}} \Comment{Algorithm~\vref{ILS-pseudoI}}
+         \EndForEach
+         \State\Return{\Var{candidates}}
+      \EndFunction
+      \Statex\Comment{continued on page~\pageref{MA2-pseudoII}\ldots}
+   \algstore{MA2}\end{algorithmic}
+\end{algorithm}
+\begin{algorithm}[tbhp]
+   \caption{MA2, Part II}
+   \label{MA2-pseudoII}
+   \begin{algorithmic}[1]\algrestore{MA2}
+      \Statex
+      \Statex\Comment{\ldots continued from page~\pageref{MA2-pseudoI}}
+      \Function{select individuals}{\Var{generation}, \Var{count}}
+         \Let{\Var{selection}}{$\{\}$}
+         \LoopFor{\Var{count} times}
+            \State \Comment{$k$-tournament}
+            \Let{\Var{contenders}}{$k$ randomly selected, distinct individuals $\in\var{generation}$}%
+            \Let{\Var{winner}}{the contender with the smallest width}
+            \Let{\Var{selection}}{$\var{selection}\cup\{\var{winner}\}$}
+         \EndLoopFor
+         \State\Return{\Var{selection}}
+      \EndFunction
+   %\algstore{MA2}\end{algorithmic}
+%\end{algorithm}
+%\begin{algorithm}[tbp]
+   %\caption{\gls{MA2} (II)}
+   %\begin{algorithmic}[1]\algrestore{MA2}
+      \Statex
+      \Function{crossover}{\Var{parent1}, \Var{parent2}}
+         \State\Comment{\gls{POS}}
+         \Let{\Var{selected positions}}{randomly select a set of positions of the ordering}
+         \Let{\Var{child}}{\parbox[t]{.84\linewidth}{new elimination ordering where \Var{selected positions} are copied from \Var{parent1}}}\vspace{0.35em}
+         \Let{\Var{child}}{\parbox[t]{.84\linewidth}{\Var{child} with empty positions filled with the remaining vertices, in the order of their occurence in \Var{parent2}}}\vspace{0.35em}
+         \State\Return{\Var{child}}
+      \EndFunction
+   %\algstore{MA2}\end{algorithmic}
+%\end{algorithm}
+%\begin{algorithm}[tbp]
+   %\caption{\gls{MA2} (II)}
+   %\begin{algorithmic}[1]\algrestore{MA2}
+      \Statex
+      \Function{mutate}{\Var{individual}}
+         \Let{\Var{individual}}{randomly choose a position in the \Var{individual}'s elimination}
+            \ContinueLine{1}{\Var{individual}}ordering and move the corresponding vertex to another,
+            \ContinueLine{1}{\Var{individual}}randomly selected position
+         \State\Return{\Var{individual}}
+      \EndFunction
+   \end{algorithmic}
+\end{algorithm}
+
+
+\end{document}
+% vim: set ts=3 sts=3 sw=3 tw=0 et :
