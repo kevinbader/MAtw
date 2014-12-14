@@ -11,11 +11,11 @@ Building from Source
 
 Debug build:
 
-    $ mkdir build && cd build && cmake .. && make
+    mkdir build && cd build && cmake .. && make
 
 Optimized build:
 
-    $ mkdir build_release && cd build_release && cmake .. -DCMAKE_BUILD_TYPE=Release && make
+    mkdir build_release && cd build_release && cmake .. -DCMAKE_BUILD_TYPE=Release && make
 
 
 Running the Algorithms
@@ -23,11 +23,12 @@ Running the Algorithms
 
 Usage information can be displayed with `--help`, e.g.,
 
-    $ ./MA1_-1 --help
+    ./MA1_-1 --help
 
 
 License
 =======
 
 Copyright (c) 2014 Kevin Bader.
+
 Distributed under the GNU GPL v3 or later. For full terms see the file `LICENSE`.
