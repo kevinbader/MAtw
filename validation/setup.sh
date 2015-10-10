@@ -21,10 +21,6 @@ function setup_build() {
     #cd $base_dir
 }
 
-# TODO ILS
-# - lol: LS1: move in source (TabuSearch.cpp:805), swap in paper, swap in *MA
-# - treewidth vs largest clique size: verwendet nysret wirklich die falsche größe?
-#   tw = max clique size - 1; IHA verwendet max clique size. Fehler?
 function setup_IHA() {
     exe=IHA
     outfile=$base_dir/${exe}.conf
